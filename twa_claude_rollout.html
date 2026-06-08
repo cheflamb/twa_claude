@@ -10,28 +10,35 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --ink: #0A0908;
-  --paper: #F5F0E8;
-  --warm: #EDE5D4;
-  --warm-mid: #D9CDB8;
+  /* ── Chef Life Media brand palette: brick red + gold on warm cream/ink ── */
+  --ink: #1A1209;          /* warm near-black (logo lettering) */
+  --paper: #F6EFE2;        /* warm cream (logo inner field) */
+  --warm: #EFE6D5;
+  --warm-mid: #E0D2BB;
   --warm-dark: #B8A98A;
-  --gold: #B8892A;
-  --gold-light: #D4A84B;
-  --gold-pale: #F0DFA8;
-  --teal: #2A6B5F;
-  --teal-light: #3D9080;
-  --teal-pale: #C4DDD9;
-  --rust: #B84A2A;
-  --rust-pale: #F0D0C4;
-  --violet: #5A3A7A;
-  --violet-pale: #D8C8EC;
-  --text: #1C1714;
-  --text-mid: #4A3F35;
-  --text-dim: #7A6E64;
-  --text-muted: #A89E94;
-  --border: #D0C4B0;
-  --border-light: #E4DAC8;
-  --shadow: rgba(10,9,8,0.08);
+  --gold: #C0871F;         /* deep gold — text-safe on light */
+  --gold-light: #E2A949;   /* logo ring gold */
+  --gold-pale: #F3DFAC;
+  /* --teal repurposed as BRICK RED (primary accent) so existing classes inherit brand */
+  --teal: #A6342A;         /* brick red (logo "MEDIA") */
+  --teal-light: #C2503E;
+  --teal-pale: #EEC9C1;
+  --rust: #BC4A2C;         /* warm terracotta */
+  --rust-pale: #F1D2C5;
+  /* --violet repurposed as warm brown */
+  --violet: #7A4A24;
+  --violet-pale: #E4D2BA;
+  --text: #211913;
+  --text-mid: #4E4034;
+  --text-dim: #7E6F60;
+  --text-muted: #A99A86;
+  --border: #D8C8AE;
+  --border-light: #E9DDC6;
+  --shadow: rgba(26,18,9,0.10);
+  /* explicit brand tokens for the collaboration UI */
+  --brick: #A6342A;
+  --brick-dark: #87271F;
+  --gold-deep: #B07A1A;
 }
 
 html { scroll-behavior: smooth; }
@@ -74,8 +81,8 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(184,137,42,0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(42,107,95,0.10) 0%, transparent 70%);
+    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(226,169,73,0.14) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(166,52,42,0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -420,10 +427,10 @@ body {
   margin: 2px 3px 2px 0;
 }
 
-.tag-gold { color: var(--gold); border-color: var(--gold); background: rgba(184,137,42,0.07); }
-.tag-teal { color: var(--teal); border-color: var(--teal); background: rgba(42,107,95,0.07); }
-.tag-rust { color: var(--rust); border-color: var(--rust); background: rgba(184,74,42,0.07); }
-.tag-violet { color: var(--violet); border-color: var(--violet); background: rgba(90,58,122,0.07); }
+.tag-gold { color: var(--gold-deep); border-color: var(--gold); background: rgba(226,169,73,0.10); }
+.tag-teal { color: var(--teal); border-color: var(--teal); background: rgba(166,52,42,0.07); }
+.tag-rust { color: var(--rust); border-color: var(--rust); background: rgba(188,74,44,0.07); }
+.tag-violet { color: var(--violet); border-color: var(--violet); background: rgba(122,74,36,0.08); }
 .tag-ink { color: var(--ink); border-color: var(--ink); background: rgba(10,9,8,0.05); }
 
 /* ── ROLE TABLE ── */
@@ -502,9 +509,9 @@ body {
   line-height: 1.65;
 }
 
-.callout-gold { background: rgba(184,137,42,0.07); border-color: var(--gold); color: var(--text-mid); }
-.callout-teal { background: rgba(42,107,95,0.07); border-color: var(--teal); color: var(--text-mid); }
-.callout-rust { background: rgba(184,74,42,0.07); border-color: var(--rust); color: var(--text-mid); }
+.callout-gold { background: rgba(226,169,73,0.10); border-color: var(--gold); color: var(--text-mid); }
+.callout-teal { background: rgba(166,52,42,0.07); border-color: var(--teal); color: var(--text-mid); }
+.callout-rust { background: rgba(188,74,44,0.07); border-color: var(--rust); color: var(--text-mid); }
 
 .callout strong {
   display: block;
@@ -666,17 +673,17 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   background: var(--ink);
-  color: #A0C0B0;
+  color: #C9B79A;
   padding: 24px 28px;
   line-height: 2.1;
   margin: 12px 0;
   border: 1px solid var(--border);
 }
 
-.folder-tree .dir { color: #D4A84B; }
-.folder-tree .file { color: #8BC0B0; }
-.folder-tree .comment { color: #5A6A60; font-style: italic; }
-.folder-tree .new { color: #90D0A8; }
+.folder-tree .dir { color: #E2A949; }
+.folder-tree .file { color: #E0C089; }
+.folder-tree .comment { color: #8A7A64; font-style: italic; }
+.folder-tree .new { color: #D98C5A; }
 
 /* ── WORKSPACE MAP ── */
 .ws-grid {
@@ -776,6 +783,116 @@ body {
 
 .footer-text span { color: var(--gold); opacity: 1; }
 
+/* ── BRAND LOGO ── */
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+.topbar-logo { height: 22px; width: auto; display: block; }
+.hero-logo {
+  position: absolute;
+  top: 36px; right: 48px;
+  height: 92px; width: 92px;
+  border-radius: 50%;
+  z-index: 2;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
+  animation: logoFloat 6s ease-in-out infinite;
+}
+.footer-logo { height: 30px; width: auto; display: block; opacity: 0.92; }
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── LIVE PROGRESS CHIP (topbar) ── */
+.live-chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  color: var(--gold-light);
+}
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ED07A; box-shadow: 0 0 0 0 rgba(78,208,122,0.6);
+  animation: pulse 2s infinite;
+}
+.live-dot.offline { background: var(--text-muted); animation: none; box-shadow: none; }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(78,208,122,0.6); }
+  70% { box-shadow: 0 0 0 6px rgba(78,208,122,0); }
+  100% { box-shadow: 0 0 0 0 rgba(78,208,122,0); }
+}
+
+/* ── COLLAB DOCK (floating) ── */
+.collab-dock {
+  position: fixed; bottom: 20px; right: 20px; z-index: 500;
+  background: var(--ink); color: var(--paper);
+  border: 1px solid rgba(226,169,73,0.35);
+  box-shadow: 0 10px 40px rgba(26,18,9,0.35);
+  padding: 14px 16px; width: 244px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.collab-dock h4 {
+  font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold-light); margin-bottom: 10px; font-weight: 500;
+  display: flex; align-items: center; gap: 7px;
+}
+.collab-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.collab-name-input {
+  flex: 1; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14); color: var(--paper);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  padding: 6px 8px; outline: none; min-width: 0;
+}
+.collab-name-input:focus { border-color: var(--gold-light); }
+.collab-stat {
+  font-size: 10px; color: var(--warm-dark); line-height: 1.6;
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 9px;
+}
+.collab-stat b { color: var(--gold-light); }
+.collab-reset {
+  width: 100%; margin-top: 10px; cursor: pointer;
+  background: transparent; color: var(--rust);
+  border: 1px solid rgba(188,74,44,0.5);
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.12em; text-transform: uppercase; padding: 7px;
+  transition: all 0.15s;
+}
+.collab-reset:hover { background: rgba(188,74,44,0.16); color: #E88; }
+.collab-collapse {
+  position: absolute; top: 10px; right: 12px; cursor: pointer;
+  color: var(--warm-dark); background: none; border: none; font-size: 14px; line-height: 1;
+}
+.collab-dock.collapsed .collab-body { display: none; }
+.collab-dock.collapsed { width: auto; }
+
+/* checkbox "who" attribution */
+.check-by {
+  flex: 0 0 100%; padding-left: 26px; font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; color: var(--gold-deep); margin-top: 2px; letter-spacing: 0.04em;
+}
+.checklist li { flex-wrap: wrap; cursor: pointer; }
+.checklist li > span { flex: 1 1 auto; min-width: 0; }
+.check-by:empty { display: none; }
+
+/* ── DRAGGABLE ROLE TILES ── */
+.role-card[draggable="true"] { cursor: grab; }
+.role-card.dragging { opacity: 0.4; cursor: grabbing; }
+.role-card.drag-over { outline: 2px dashed var(--gold); outline-offset: 3px; }
+.role-grip {
+  position: absolute; top: 14px; right: 14px;
+  font-size: 12px; color: var(--text-muted); letter-spacing: -1px;
+  opacity: 0; transition: opacity 0.2s;
+}
+.role-card:hover .role-grip { opacity: 0.7; }
+
+/* ── CELEBRATION ── */
+.celebrate {
+  display: none; margin-top: 24px; padding: 22px 26px;
+  background: linear-gradient(100deg, var(--brick), var(--gold-deep));
+  color: #fff; text-align: center;
+}
+.celebrate.show { display: block; animation: fadeIn 0.5s ease both; }
+.celebrate strong { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; display: block; margin-bottom: 4px; }
+.celebrate span { font-size: 12px; opacity: 0.9; }
+
 /* ── ANIMATIONS ── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
@@ -798,12 +915,16 @@ body {
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <span class="topbar-left">TWA CLAUDE OS · WORKSPACE IMPLEMENTATION GUIDE</span>
-  <span class="topbar-right">thewideawakening.com · v1.0 · June 2026</span>
+  <span class="topbar-brand">
+    <img class="topbar-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
+    <span class="topbar-left">TWA CLAUDE OS · WORKSPACE IMPLEMENTATION GUIDE</span>
+  </span>
+  <span class="live-chip"><span class="live-dot" id="live-dot"></span><span id="live-chip-text">0 / 28 LIVE</span></span>
 </div>
 
 <!-- HERO -->
 <div class="hero">
+  <img class="hero-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
   <div class="hero-tag">The Wide Awakening · Google Workspace</div>
   <h1>Claude OS<br><em>Implementation Guide</em></h1>
   <p class="hero-sub">A complete playbook for deploying the TWA Claude operating system across the @thewideawakening.com Google Workspace — from account setup through full team activation.</p>
@@ -1689,6 +1810,11 @@ body {
       When all 28 items above are checked, the TWA Claude OS is fully operational. Jeannie owns the system. The team is running. Adam is on call for Phase 2 planning. Jennifer is creating from overflow, not from effort.
     </div>
 
+    <div class="celebrate" id="celebrate">
+      <strong>🎉 The TWA Claude OS is live.</strong>
+      <span>All 28 launch items complete. Nice work, team.</span>
+    </div>
+
   </div>
 
 </div><!-- /main -->
@@ -1696,44 +1822,184 @@ body {
 <!-- FOOTER -->
 <div class="footer">
   <div class="footer-text">The Wide Awakening · <span>Claude OS</span> · Google Workspace Implementation Guide · v1.0 · June 2026</div>
-  <div class="footer-text">Built by <span>Chef Life Media LLC</span> · adam@cheflifemedia.com</div>
+  <div style="display:flex; align-items:center; gap:12px;">
+    <img class="footer-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
+    <div class="footer-text">Built by <span>Chef Life Media LLC</span> · adam@cheflifemedia.com</div>
+  </div>
 </div>
 
+<!-- COLLAB DOCK (live shared state) -->
+<div class="collab-dock" id="collab-dock">
+  <button class="collab-collapse" id="collab-collapse" title="Collapse">–</button>
+  <h4><span class="live-dot" id="dock-dot"></span>Live Team Checklist</h4>
+  <div class="collab-body">
+    <div class="collab-row">
+      <input class="collab-name-input" id="collab-name" placeholder="Your name…" maxlength="24" autocomplete="off">
+    </div>
+    <div class="collab-stat" id="collab-stat">Connecting…</div>
+    <button class="collab-reset" id="collab-reset">Reset all checkboxes</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  // Tab switching
+  // ─────────────────────────────────────────────────────────────
+  // Shared live state via Supabase (project: twa-claude-os)
+  // ─────────────────────────────────────────────────────────────
+  const SB_URL = 'https://hkhcbmworgfossnfhpeu.supabase.co';
+  const SB_KEY = 'sb_publishable_zFOIF91S6ZvInM0lhqJ2HA_DhsevBaW'; // public anon key — safe to expose
+  let sb = null;
+  try { sb = window.supabase.createClient(SB_URL, SB_KEY); }
+  catch (e) { console.error('Supabase init failed:', e); }
+
+  // ── Identity (stored on this device) ──
+  let myName = localStorage.getItem('twa_name') || '';
+  const nameInput = document.getElementById('collab-name');
+  nameInput.value = myName;
+  nameInput.addEventListener('input', () => {
+    myName = nameInput.value.trim();
+    localStorage.setItem('twa_name', myName);
+  });
+
+  // ── Give every checklist item a stable key + attribution slot ──
+  const itemByKey = new Map();
+  document.querySelectorAll('.checklist li').forEach((li, i) => {
+    const key = 'i' + i;
+    li.dataset.key = key;
+    itemByKey.set(key, li);
+    const by = document.createElement('small');
+    by.className = 'check-by';
+    li.appendChild(by);
+  });
+
+  // ── Tabs (with shareable #hash deep-links) ──
   function switchTab(panelId, btn) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById('panel-' + panelId).classList.add('active');
-    btn.classList.add('active');
+    const panel = document.getElementById('panel-' + panelId);
+    if (panel) panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+    else { const t = document.querySelector('.nav-tab[onclick*="\'' + panelId + '\'"]'); if (t) t.classList.add('active'); }
+    if (location.hash !== '#' + panelId) history.replaceState(null, '', '#' + panelId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  window.switchTab = switchTab;
 
-  // Phase accordion
-  function togglePhase(header) {
-    const card = header.closest('.phase-card');
-    card.classList.toggle('open');
+  function togglePhase(header) { header.closest('.phase-card').classList.toggle('open'); }
+  window.togglePhase = togglePhase;
+
+  // ── Apply / write a checkbox value ──
+  function setItem(li, checked, by, write) {
+    li.classList.toggle('checked', checked);
+    const byEl = li.querySelector('.check-by');
+    if (byEl) byEl.textContent = (checked && by) ? '✓ ' + by : '';
+    if (write && sb) {
+      sb.from('checklist_state').upsert({
+        item_key: li.dataset.key, checked,
+        updated_by: by || null, updated_at: new Date().toISOString()
+      }).then(({ error }) => { if (error) console.error('write failed:', error); });
+    }
   }
-
-  // Checklist toggle
   function toggleCheck(li) {
-    li.classList.toggle('checked');
+    setItem(li, !li.classList.contains('checked'), myName, true);
     updateProgress();
   }
+  window.toggleCheck = toggleCheck;
 
-  // Progress bar
+  // ── Progress (headline = the 28-item master launch list) ──
   function updateProgress() {
     const all = document.querySelectorAll('.master-checklist li');
     const done = document.querySelectorAll('.master-checklist li.checked');
-    const total = all.length;
-    const count = done.length;
+    const total = all.length, count = done.length;
     const pct = total ? (count / total * 100) : 0;
-    document.getElementById('progress-fill').style.width = pct + '%';
-    document.getElementById('progress-count').textContent = count + ' / ' + total + ' complete';
+    const fill = document.getElementById('progress-fill'); if (fill) fill.style.width = pct + '%';
+    const pc = document.getElementById('progress-count'); if (pc) pc.textContent = count + ' / ' + total + ' complete';
+    const chip = document.getElementById('live-chip-text'); if (chip) chip.textContent = count + ' / ' + total + ' LIVE';
+    const cel = document.getElementById('celebrate'); if (cel) cel.classList.toggle('show', total > 0 && count === total);
+    const stat = document.getElementById('collab-stat');
+    if (stat && stat.dataset.ready) {
+      const overall = document.querySelectorAll('.checklist li').length;
+      const overallDone = document.querySelectorAll('.checklist li.checked').length;
+      stat.innerHTML = '<b>' + count + '/' + total + '</b> launch items · <b>' + overallDone + '/' + overall + '</b> total checked';
+    }
   }
 
-  // Init
+  function setOnline(on) {
+    document.querySelectorAll('.live-dot').forEach(d => d.classList.toggle('offline', !on));
+  }
+
+  // ── Load existing state + subscribe to realtime ──
+  async function initSync() {
+    const stat = document.getElementById('collab-stat');
+    if (!sb) { if (stat) stat.textContent = 'Offline — checkboxes won’t sync.'; setOnline(false); return; }
+    try {
+      const { data, error } = await sb.from('checklist_state').select('*');
+      if (error) throw error;
+      (data || []).forEach(row => { const li = itemByKey.get(row.item_key); if (li) setItem(li, row.checked, row.updated_by, false); });
+      if (stat) stat.dataset.ready = '1';
+      setOnline(true);
+      updateProgress();
+    } catch (e) {
+      console.error('load failed:', e); setOnline(false);
+      if (stat) stat.textContent = 'Offline — could not reach the server.';
+    }
+    sb.channel('checklist_rt')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'checklist_state' }, payload => {
+        if (payload.eventType === 'DELETE') {
+          const li = itemByKey.get(payload.old.item_key); if (li) setItem(li, false, '', false);
+        } else {
+          const row = payload.new; const li = itemByKey.get(row.item_key);
+          if (li) setItem(li, row.checked, row.updated_by, false);
+        }
+        updateProgress();
+      })
+      .subscribe(status => { if (status === 'SUBSCRIBED' || status === 'CLOSED' || status === 'CHANNEL_ERROR') setOnline(status === 'SUBSCRIBED'); });
+  }
+
+  // ── Reset (clears shared state for everyone) ──
+  document.getElementById('collab-reset').addEventListener('click', async () => {
+    if (!confirm('Reset ALL checkboxes for everyone? This clears the shared progress.')) return;
+    document.querySelectorAll('.checklist li').forEach(li => setItem(li, false, '', false));
+    updateProgress();
+    if (sb) { const { error } = await sb.from('checklist_state').delete().neq('item_key', ''); if (error) console.error('reset failed:', error); }
+  });
+
+  // ── Collapse the dock ──
+  document.getElementById('collab-collapse').addEventListener('click', () => {
+    document.getElementById('collab-dock').classList.toggle('collapsed');
+  });
+
+  // ── Drag-to-reorder the role tiles (saved per device) ──
+  (function initDrag() {
+    const grid = document.querySelector('.role-grid'); if (!grid) return;
+    grid.querySelectorAll('.role-card').forEach((c, i) => {
+      if (!c.id) c.id = 'role-' + i;
+      c.setAttribute('draggable', 'true');
+      const grip = document.createElement('div'); grip.className = 'role-grip'; grip.textContent = '⠿'; c.appendChild(grip);
+      c.addEventListener('dragstart', e => { c.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+      c.addEventListener('dragend', () => { c.classList.remove('dragging'); grid.querySelectorAll('.drag-over').forEach(x => x.classList.remove('drag-over')); saveOrder(); });
+      c.addEventListener('dragover', e => { e.preventDefault(); const d = grid.querySelector('.dragging'); if (d && d !== c) c.classList.add('drag-over'); });
+      c.addEventListener('dragleave', () => c.classList.remove('drag-over'));
+      c.addEventListener('drop', e => {
+        e.preventDefault(); c.classList.remove('drag-over');
+        const d = grid.querySelector('.dragging'); if (!d || d === c) return;
+        const rect = c.getBoundingClientRect();
+        grid.insertBefore(d, (e.clientY > rect.top + rect.height / 2) ? c.nextSibling : c);
+      });
+    });
+    function saveOrder() { localStorage.setItem('twa_role_order', JSON.stringify([...grid.querySelectorAll('.role-card')].map(c => c.id))); }
+    const saved = localStorage.getItem('twa_role_order');
+    if (saved) { try { JSON.parse(saved).forEach(id => { const el = document.getElementById(id); if (el) grid.appendChild(el); }); } catch (e) {} }
+  })();
+
+  // ── Restore tab from URL hash on load ──
+  (function restoreHash() {
+    const h = location.hash.replace('#', '');
+    if (h && document.getElementById('panel-' + h)) switchTab(h, null);
+  })();
+
   updateProgress();
+  initSync();
 </script>
 </body>
 </html>
