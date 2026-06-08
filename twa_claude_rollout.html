@@ -1172,6 +1172,7 @@ body {
     <button class="nav-tab" onclick="switchTab('phase4', this)">Phase 4 · Activation</button>
     <button class="nav-tab" onclick="switchTab('roles', this)">Role Setup</button>
     <button class="nav-tab" onclick="switchTab('checklist', this)">Launch Checklist</button>
+    <button class="nav-tab" onclick="switchTab('teamref', this)">Team Reference</button>
     <button class="nav-tab" onclick="switchTab('playbook', this)">Prompt Playbook</button>
     <button class="nav-tab" onclick="switchTab('board', this)">Board 🔒</button>
   </nav>
@@ -2095,6 +2096,139 @@ body {
     <div class="celebrate" id="celebrate">
       <strong>🎉 The TWA Claude OS is live.</strong>
       <span>All 28 launch items complete. Nice work, team.</span>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════ TEAM REFERENCE ══════════════════════════════════ -->
+  <div id="panel-teamref" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Team Ref</span>
+      <h2>The Everyday<br><em>Field Guide</em></h2>
+    </div>
+
+    <p class="section-intro">Everything a team member needs day to day — where files live, how to name them, how to set up Claude, and the rules that keep the system clean. The phase tabs above are the one-time admin build-out; <strong>this</strong> is your everyday reference.</p>
+
+    <div class="subsection">
+      <h3>Single Source of Truth</h3>
+      <p style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">Everyone reads from here. Every approved output lives here. Nothing gets published without passing through this structure.</p>
+      <div class="folder-tree">
+<span class="dir">TWA Claude OS/</span>  <span class="comment">← Shared Drive root</span><br>
+│<br>
+├── <span class="dir">_AI Operations/</span>  <span class="comment">← Jeannie + Jennifer own · team reads only</span><br>
+│   ├── <span class="file">MASTER - Claude Project Instructions.md</span>  <span class="comment">← system prompt</span><br>
+│   ├── <span class="file">MASTER - Brand Voice Document.md</span>  <span class="comment">← Jennifer's tone</span><br>
+│   ├── <span class="file">MASTER - Avatar Profile.md</span>  <span class="comment">← ideal client</span><br>
+│   ├── <span class="file">MASTER - Offer Library.md</span>  <span class="comment">← programs + pricing</span><br>
+│   ├── <span class="file">MASTER - How To Set Up Claude.md</span>  <span class="comment">← onboarding</span><br>
+│   ├── <span class="file">MASTER - Output Naming Convention.md</span>  <span class="comment">← filename rules</span><br>
+│   ├── <span class="file">TWA_AI_System_Overview.html</span>  <span class="comment">← visual map</span><br>
+│   └── <span class="dir">Avatar Research/</span>  <span class="comment">← evidentiary files</span><br>
+│<br>
+├── <span class="dir">_AI Outputs/</span>  <span class="comment">← all Claude-generated work, by topic</span><br>
+│   ├── <span class="dir">01 - Administration/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">02 - Social Media/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">03 - Video &amp; Content/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">04 - Program Development/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">05 - Research &amp; Intelligence/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">06 - Launch &amp; Planning/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">07 - Financial &amp; Projections/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   ├── <span class="dir">08 - Retreat Planning/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│   └── <span class="dir">09 - Book Project/</span> → <span class="new">Drafts/</span> <span class="new">Approved/</span><br>
+│<br>
+├── <span class="dir">_AI Archive/</span>  <span class="comment">← Approved outputs &gt; 90 days old</span><br>
+│<br>
+└── <span class="dir">_Team Reference/</span>  <span class="comment">← Prompt Playbook, Sync Protocol, this guide</span>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Output Naming Convention</h3>
+      <div class="callout callout-gold" style="margin-bottom:14px;">
+        <strong>Format</strong>
+        <code style="font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--teal);">YYYY-MM-DD_Role_ContentType_Topic</code>
+      </div>
+      <table class="info-table">
+        <thead><tr><th>Field</th><th>Options &amp; Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Role</td><td>Admin · SocialMedia · Video · ProgramMgr · Jennifer · Jeannie</td></tr>
+          <tr><td>Content type</td><td>Email · Caption · ContentCalendar · ResearchBrief · SOPDraft · LandingPage · WebinarOutline · FinancialModel · RetreatPlan</td></tr>
+          <tr><td>Example</td><td><code>2026-03-30_SocialMedia_ContentCalendar_AprilAwakening</code></td></tr>
+          <tr><td>Example</td><td><code>2026-03-30_Admin_ResearchBrief_CollaboratorJaneDoe</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>Claude Pro &amp; Your Setup</h3>
+      <div class="callout callout-rust">
+        <strong>Claude Pro is required — $20/month per person</strong>
+        Without it, Claude Projects and Knowledge documents aren't available, and none of the shared-context system works.
+      </div>
+      <table class="info-table" style="margin-top:14px;">
+        <thead><tr><th>Role</th><th>Plan</th><th>Primary Claude uses</th></tr></thead>
+        <tbody>
+          <tr><td>Admin Assistant</td><td>Pro</td><td>Emails, SOPs, research briefs, outreach drafts</td></tr>
+          <tr><td>Program Manager</td><td>Pro</td><td>Curricula, event planning, webinar outlines, retreat logistics</td></tr>
+          <tr><td>Video Editor</td><td>Pro</td><td>Transcript → clip concepts, SEO metadata, chapter markers</td></tr>
+          <tr><td>Social Media</td><td>Pro</td><td>Captions, content calendars, avatar research, trend reports</td></tr>
+          <tr><td>Jeannie (GM)</td><td>Pro</td><td>Review support, strategic planning, team comms, all of the above</td></tr>
+          <tr><td>Jennifer</td><td>Pro</td><td>Book writing, big-picture strategy, program development</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>Your Local Folder</h3>
+      <p style="font-size:13px;color:var(--text-mid);margin-bottom:8px;">Create this on your own machine. It's personal scratch space — not a permanent home for anything.</p>
+      <div class="folder-tree">
+<span class="dir">TWA-AI-Work/</span>  <span class="comment">← create on Desktop or Documents</span><br>
+│<br>
+├── <span class="dir">_Context/</span>  <span class="comment">← offline copies of the MASTER docs you use most</span><br>
+│   ├── <span class="file">Brand Voice.md</span><br>
+│   ├── <span class="file">Avatar Profile.md</span><br>
+│   └── <span class="file">Offer Library.md</span>  <span class="comment">← copy from _AI Operations</span><br>
+│<br>
+├── <span class="dir">Working Drafts/</span>  <span class="comment">← scratch only · move to Drive when ready</span><br>
+│<br>
+└── <span class="dir">Prompts/</span>  <span class="comment">← your personal reusable-prompt library</span>
+      </div>
+      <div class="callout callout-gold">
+        <strong>Local is Temporary · Drive is Permanent</strong>
+        Once an output is ready for review it goes to <strong>Google Drive → _AI Outputs → [Topic] → Drafts</strong>. Local files are scratch; the Shared Drive is the record.
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Claude Project Setup · 5 Steps</h3>
+      <ul class="step-list">
+        <li class="step-item"><span class="step-num">01</span><div class="step-content"><div class="step-title">Open claude.ai and find Projects</div><div class="step-detail">Sign in with your @thewideawakening.com account → click <strong>Projects</strong> in the left sidebar.</div></div></li>
+        <li class="step-item"><span class="step-num">02</span><div class="step-content"><div class="step-title">Create your role Project</div><div class="step-detail">Click <strong>New Project</strong> → name it <code>TWA — [Your Role]</code> (e.g. <code>TWA — Social Media</code>), matching the convention on the <strong>Phase 3 · Claude</strong> tab.</div></div></li>
+        <li class="step-item"><span class="step-num">03</span><div class="step-content"><div class="step-title">Paste the Project Instructions</div><div class="step-detail">Open <code>MASTER - Claude Project Instructions.md</code> from the Shared Drive → copy all of it → paste into the Project's <strong>Instructions</strong> field.</div></div></li>
+        <li class="step-item"><span class="step-num">04</span><div class="step-content"><div class="step-title">Add the MASTER documents as Knowledge</div><div class="step-detail">Click <strong>Add Content</strong> (Knowledge) and add the MASTER documents — see <strong>Phase 3 · Claude</strong> for the exact list to load for your role.</div></div></li>
+        <li class="step-item"><span class="step-num">05</span><div class="step-content"><div class="step-title">Start your first session</div><div class="step-detail">State your role and task, e.g. <em>"I'm the social media manager. We have an Awakened Conversations event in 3 weeks — I need a 2-week Instagram content calendar."</em></div></div></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>The 3 Golden Rules</h3>
+      <div class="callout callout-teal"><strong>Rule 1</strong>Google Drive is the single source of truth — always.</div>
+      <div class="callout callout-teal"><strong>Rule 2</strong>Nothing leaves Drafts without Jeannie's review.</div>
+      <div class="callout callout-teal"><strong>Rule 3</strong>Update the MASTER docs when anything changes — not in your head, in the file.</div>
+    </div>
+
+    <div class="subsection">
+      <h3>When Something Goes Wrong</h3>
+      <table class="info-table">
+        <thead><tr><th>Symptom</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Output doesn't sound like Jennifer</td><td>Update the <strong>Brand Voice</strong> doc in _AI Operations</td></tr>
+          <tr><td>Wrong offer details in content</td><td>Update the <strong>Offer Library</strong></td></tr>
+          <tr><td>Team confused about where to save</td><td>Re-share the <strong>Output Naming Convention</strong></td></tr>
+          <tr><td>Instructions feel outdated</td><td>Run the <strong>quarterly review</strong></td></tr>
+        </tbody>
+      </table>
     </div>
 
   </div>
