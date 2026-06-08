@@ -1860,7 +1860,7 @@ body {
       <input class="collab-name-input" id="collab-name" placeholder="Your name…" maxlength="24" autocomplete="off">
     </div>
     <div class="collab-stat" id="collab-stat">Connecting…</div>
-    <button class="collab-reset" id="collab-reset">Reset all checkboxes</button>
+    <button class="collab-reset" id="collab-reset">Reset all · admin only 🔒</button>
   </div>
 </div>
 
@@ -1979,12 +1979,20 @@ body {
       .subscribe(status => { if (status === 'SUBSCRIBED' || status === 'CLOSED' || status === 'CHANNEL_ERROR') setOnline(status === 'SUBSCRIBED'); });
   }
 
-  // ── Reset (clears shared state for everyone) ──
+  // ── Reset (admin-only — passcode verified server-side) ──
   document.getElementById('collab-reset').addEventListener('click', async () => {
-    if (!confirm('Reset ALL checkboxes for everyone? This clears the shared progress.')) return;
-    document.querySelectorAll('.checklist li').forEach(li => setItem(li, false, '', false));
-    updateProgress();
-    if (sb) { const { error } = await sb.from('checklist_state').delete().neq('item_key', ''); if (error) console.error('reset failed:', error); }
+    if (!sb) { alert('Offline — cannot reset right now.'); return; }
+    const code = prompt('Admin passcode required to clear ALL checkboxes for everyone:');
+    if (code === null) return; // cancelled
+    const { data, error } = await sb.rpc('reset_checklist', { p_code: code.trim() });
+    if (error) { console.error('reset failed:', error); alert('Reset failed — please try again.'); return; }
+    if (data === true) {
+      // Server cleared the table; realtime DELETE events also uncheck every other client.
+      document.querySelectorAll('.checklist li').forEach(li => setItem(li, false, '', false));
+      updateProgress();
+    } else {
+      alert('Incorrect passcode. Only the admin can reset the checklist.');
+    }
   });
 
   // ── Collapse the dock ──
