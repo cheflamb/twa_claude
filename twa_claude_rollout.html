@@ -786,6 +786,18 @@ body {
 /* ── BRAND LOGO ── */
 .topbar-brand { display: flex; align-items: center; gap: 10px; }
 .topbar-logo { height: 22px; width: auto; display: block; }
+.hero-masthead {
+  display: inline-flex;
+  align-items: center;
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 9px 16px;
+  margin-bottom: 26px;
+  box-shadow: 0 6px 22px rgba(0,0,0,0.28);
+  position: relative;
+  z-index: 2;
+}
+.hero-masthead img { height: 38px; width: auto; display: block; }
 .hero-logo {
   position: absolute;
   top: 36px; right: 48px;
@@ -908,6 +920,8 @@ body {
   .phase-body { padding-left: 28px; }
   .footer { padding: 20px; }
   .topbar { padding: 8px 20px; }
+  .hero-logo { height: 56px; width: 56px; top: 16px; right: 16px; }
+  .hero-masthead img { height: 32px; }
 }
 </style>
 </head>
@@ -925,6 +939,7 @@ body {
 <!-- HERO -->
 <div class="hero">
   <img class="hero-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
+  <div class="hero-masthead"><img src="twa-logo.png" alt="The Wide Awakening" onerror="this.parentNode.style.display='none'"></div>
   <div class="hero-tag">The Wide Awakening · Google Workspace</div>
   <h1>Claude OS<br><em>Implementation Guide</em></h1>
   <p class="hero-sub">A complete playbook for deploying the TWA Claude operating system across the @thewideawakening.com Google Workspace — from account setup through full team activation.</p>
