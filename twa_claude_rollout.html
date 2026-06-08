@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWA Claude OS — Google Workspace Implementation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0A0908;
+  --paper: #F5F0E8;
+  --warm: #EDE5D4;
+  --warm-mid: #D9CDB8;
+  --warm-dark: #B8A98A;
+  --gold: #B8892A;
+  --gold-light: #D4A84B;
+  --gold-pale: #F0DFA8;
+  --teal: #2A6B5F;
+  --teal-light: #3D9080;
+  --teal-pale: #C4DDD9;
+  --rust: #B84A2A;
+  --rust-pale: #F0D0C4;
+  --violet: #5A3A7A;
+  --violet-pale: #D8C8EC;
+  --text: #1C1714;
+  --text-mid: #4A3F35;
+  --text-dim: #7A6E64;
+  --text-muted: #A89E94;
+  --border: #D0C4B0;
+  --border-light: #E4DAC8;
+  --shadow: rgba(10,9,8,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--paper);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  background: var(--ink);
+  color: var(--warm-dark);
+  padding: 10px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.topbar-left { color: var(--gold-light); }
+.topbar-right { opacity: 0.6; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--ink);
+  padding: 72px 48px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(184,137,42,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(42,107,95,0.10) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-tag::before {
+  content: '';
+  display: inline-block;
+  width: 24px; height: 1px;
+  background: var(--gold);
+}
+
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 5.5vw, 68px);
+  font-weight: 400;
+  line-height: 1.08;
+  color: #F5F0E8;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--gold-light);
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--warm-dark);
+  max-width: 580px;
+  line-height: 1.7;
+  font-weight: 400;
+  position: relative;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 0;
+  margin-top: 48px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 28px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.hero-stat {
+  padding: 0 32px 0 0;
+  margin-right: 32px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--gold-light);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.hero-stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--warm-dark);
+  opacity: 0.7;
+}
+
+/* ── NAV TABS ── */
+.nav-wrapper {
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 48px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+  padding: 16px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--warm-dark);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  opacity: 0.6;
+}
+
+.nav-tab:hover { color: var(--gold-light); opacity: 1; }
+
+.nav-tab.active {
+  color: var(--gold-light);
+  border-bottom-color: var(--gold);
+  opacity: 1;
+}
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 48px 80px;
+}
+
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 36px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.section-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  background: var(--ink);
+  color: var(--gold-light);
+  padding: 6px 12px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.section-title h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--ink);
+}
+
+.section-title h2 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.section-intro {
+  font-size: 14px;
+  color: var(--text-mid);
+  max-width: 680px;
+  line-height: 1.75;
+  margin-bottom: 36px;
+}
+
+/* ── PHASE CARDS ── */
+.phases {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.phase-card {
+  background: white;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.phase-card:hover { box-shadow: 0 4px 20px var(--shadow); }
+
+.phase-header {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  align-items: center;
+  padding: 20px 28px;
+  cursor: pointer;
+  gap: 20px;
+  transition: background 0.2s;
+}
+
+.phase-header:hover { background: var(--warm); }
+
+.phase-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 400;
+  color: var(--warm-mid);
+  line-height: 1;
+}
+
+.phase-info {}
+
+.phase-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.phase-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.phase-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.phase-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.phase-duration {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.phase-owner {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.phase-chevron {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: transform 0.25s;
+  margin-left: 8px;
+}
+
+.phase-card.open .phase-chevron { transform: rotate(180deg); }
+
+.phase-body {
+  display: none;
+  border-top: 1px solid var(--border-light);
+  padding: 28px 28px 28px 120px;
+  background: var(--warm);
+}
+
+.phase-card.open .phase-body { display: block; }
+
+/* ── STEP LIST ── */
+.step-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.step-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--border-light);
+  align-items: flex-start;
+}
+
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  padding-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+.step-content {}
+
+.step-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.step-detail {
+  font-size: 12px;
+  color: var(--text-mid);
+  line-height: 1.6;
+}
+
+.step-detail code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  color: var(--teal);
+}
+
+.step-detail a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── COLOR TAGS ── */
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid;
+  margin: 2px 3px 2px 0;
+}
+
+.tag-gold { color: var(--gold); border-color: var(--gold); background: rgba(184,137,42,0.07); }
+.tag-teal { color: var(--teal); border-color: var(--teal); background: rgba(42,107,95,0.07); }
+.tag-rust { color: var(--rust); border-color: var(--rust); background: rgba(184,74,42,0.07); }
+.tag-violet { color: var(--violet); border-color: var(--violet); background: rgba(90,58,122,0.07); }
+.tag-ink { color: var(--ink); border-color: var(--ink); background: rgba(10,9,8,0.05); }
+
+/* ── ROLE TABLE ── */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.role-card {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.role-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+}
+
+.role-card.gold::before { background: var(--gold); }
+.role-card.teal::before { background: var(--teal); }
+.role-card.rust::before { background: var(--rust); }
+.role-card.violet::before { background: var(--violet); }
+.role-card.ink::before { background: var(--ink); }
+
+.role-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.role-email {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  letter-spacing: 0.04em;
+}
+
+.role-items {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.role-items li {
+  font-size: 12px;
+  color: var(--text-mid);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.role-items li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--text-muted);
+  font-size: 10px;
+}
+
+/* ── CALLOUT ── */
+.callout {
+  padding: 18px 22px;
+  margin: 16px 0;
+  border-left: 3px solid;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.callout-gold { background: rgba(184,137,42,0.07); border-color: var(--gold); color: var(--text-mid); }
+.callout-teal { background: rgba(42,107,95,0.07); border-color: var(--teal); color: var(--text-mid); }
+.callout-rust { background: rgba(184,74,42,0.07); border-color: var(--rust); color: var(--text-mid); }
+
+.callout strong {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+
+/* ── TWO COL ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 8px 0;
+}
+
+/* ── INFO TABLE ── */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+.info-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--warm);
+  border-bottom: 1px solid var(--border);
+}
+
+.info-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+  line-height: 1.5;
+  color: var(--text-mid);
+}
+
+.info-table tr:last-child td { border-bottom: none; }
+.info-table tr { background: white; }
+.info-table tr:nth-child(even) { background: var(--warm); }
+
+.info-table td:first-child {
+  font-weight: 600;
+  color: var(--ink);
+  width: 200px;
+}
+
+.info-table td code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--warm);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  color: var(--teal);
+}
+
+/* ── CHECKLIST ── */
+.checklist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+
+.check-box {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--teal);
+  transition: all 0.15s;
+}
+
+.checklist li.checked .check-box {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: white;
+}
+
+.checklist li.checked span {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* ── PROGRESS BAR ── */
+.progress-section {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.progress-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+}
+
+.progress-track {
+  width: 100%;
+  height: 4px;
+  background: var(--warm-mid);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--teal));
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* ── FOLDER TREE ── */
+.folder-tree {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--ink);
+  color: #A0C0B0;
+  padding: 24px 28px;
+  line-height: 2.1;
+  margin: 12px 0;
+  border: 1px solid var(--border);
+}
+
+.folder-tree .dir { color: #D4A84B; }
+.folder-tree .file { color: #8BC0B0; }
+.folder-tree .comment { color: #5A6A60; font-style: italic; }
+.folder-tree .new { color: #90D0A8; }
+
+/* ── WORKSPACE MAP ── */
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.ws-card {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 20px;
+  position: relative;
+}
+
+.ws-card-icon {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.ws-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.ws-card-role {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.ws-card-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.status-active { color: var(--teal); }
+.status-setup { color: var(--gold); }
+.status-future { color: var(--text-muted); }
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 32px 0;
+}
+
+/* ── SUBSECTION ── */
+.subsection {
+  margin-top: 32px;
+}
+
+.subsection h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subsection h3::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--ink);
+  padding: 28px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--warm-dark);
+  opacity: 0.5;
+  letter-spacing: 0.1em;
+}
+
+.footer-text span { color: var(--gold); opacity: 1; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.panel.active { animation: fadeIn 0.3s ease both; }
+
+@media (max-width: 760px) {
+  .hero, .main { padding-left: 20px; padding-right: 20px; }
+  .nav-wrapper { padding: 0 20px; }
+  .role-grid, .two-col, .ws-grid { grid-template-columns: 1fr; }
+  .phase-body { padding-left: 28px; }
+  .footer { padding: 20px; }
+  .topbar { padding: 8px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="topbar-left">TWA CLAUDE OS · WORKSPACE IMPLEMENTATION GUIDE</span>
+  <span class="topbar-right">thewideawakening.com · v1.0 · June 2026</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">The Wide Awakening · Google Workspace</div>
+  <h1>Claude OS<br><em>Implementation Guide</em></h1>
+  <p class="hero-sub">A complete playbook for deploying the TWA Claude operating system across the @thewideawakening.com Google Workspace — from account setup through full team activation.</p>
+  <div class="hero-meta">
+    <div class="hero-stat">
+      <div class="hero-stat-num">5</div>
+      <div class="hero-stat-label">Team Seats</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">4</div>
+      <div class="hero-stat-label">Phases</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">MASTER Docs</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">~3h</div>
+      <div class="hero-stat-label">Total Setup Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-wrapper">
+  <nav class="nav-tabs">
+    <button class="nav-tab active" onclick="switchTab('overview', this)">Overview</button>
+    <button class="nav-tab" onclick="switchTab('phase1', this)">Phase 1 · Workspace</button>
+    <button class="nav-tab" onclick="switchTab('phase2', this)">Phase 2 · Drive</button>
+    <button class="nav-tab" onclick="switchTab('phase3', this)">Phase 3 · Claude</button>
+    <button class="nav-tab" onclick="switchTab('phase4', this)">Phase 4 · Activation</button>
+    <button class="nav-tab" onclick="switchTab('roles', this)">Role Setup</button>
+    <button class="nav-tab" onclick="switchTab('checklist', this)">Launch Checklist</button>
+  </nav>
+</div>
+
+<div class="main">
+
+  <!-- ══════════════════════════════════ OVERVIEW ══════════════════════════════════ -->
+  <div id="panel-overview" class="panel active">
+
+    <div class="section-title">
+      <span class="section-badge">Overview</span>
+      <h2>Architecture &<br><em>Implementation Strategy</em></h2>
+    </div>
+
+    <p class="section-intro">The TWA Claude OS uses Google Workspace as its backbone — shared Drive as the single source of truth, Workspace accounts to anchor Claude Pro seats, and Google Drive for Desktop to keep every team member's files live-synced. This guide walks through every step from provisioning to go-live.</p>
+
+    <div class="subsection">
+      <h3>System Architecture</h3>
+      <div class="ws-grid">
+        <div class="ws-card">
+          <div class="ws-card-icon">🗂️</div>
+          <div class="ws-card-name">Google Shared Drive</div>
+          <div class="ws-card-role">Single source of truth. All MASTER documents and AI Outputs live here. Every team member has access.</div>
+          <div class="ws-card-status status-active">● Active Foundation</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-card-icon">🤖</div>
+          <div class="ws-card-name">Claude Pro (per seat)</div>
+          <div class="ws-card-role">Each team member has their own Claude Pro account. Accounts are anchored to @thewideawakening.com Workspace emails.</div>
+          <div class="ws-card-status status-setup">◐ Setup Required</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-card-icon">💻</div>
+          <div class="ws-card-name">Drive for Desktop</div>
+          <div class="ws-card-role">Installed on every machine. Maps the Shared Drive as a local folder, enabling instant copy-paste into Claude.</div>
+          <div class="ws-card-status status-setup">◐ Install Required</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-card-icon">📋</div>
+          <div class="ws-card-name">Claude Projects</div>
+          <div class="ws-card-role">Role-specific Projects in each Claude account hold the shared system prompt + role-tailored knowledge documents.</div>
+          <div class="ws-card-status status-setup">◐ Config Required</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-card-icon">📤</div>
+          <div class="ws-card-name">AI Outputs Pipeline</div>
+          <div class="ws-card-role">Outputs flow from Claude → <code>_AI Outputs/[Role]/Drafts/</code> → Jeannie review → Approved folder.</div>
+          <div class="ws-card-status status-setup">◐ Folder Setup</div>
+        </div>
+        <div class="ws-card">
+          <div class="ws-card-icon">🔄</div>
+          <div class="ws-card-name">Sync Protocol</div>
+          <div class="ws-card-role">Monthly check owned by Jeannie. MASTER doc updates propagate to all Claude Projects within 48h of change.</div>
+          <div class="ws-card-status status-active">● Documented</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>What Google Workspace Provides</h3>
+      <table class="info-table">
+        <thead>
+          <tr><th>Capability</th><th>How Claude OS Uses It</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Shared Drive</td>
+            <td>Houses all MASTER docs, Prompt Playbooks, AI Outputs, and Avatar Research in a permanent, team-accessible location</td>
+            <td>Unlike My Drive, Shared Drive files are owned by the org — not individuals. Files persist if a team member leaves.</td>
+          </tr>
+          <tr>
+            <td>@thewideawakening.com email</td>
+            <td>Each team member's Claude Pro account is registered to their Workspace email, keeping accounts organizational assets</td>
+            <td>Enables IT-level account recovery if needed. No personal Gmail accounts for team seats.</td>
+          </tr>
+          <tr>
+            <td>Drive for Desktop</td>
+            <td>Live-syncs Shared Drive to local machine. Team members copy MASTER docs into Claude from their file system, not a browser</td>
+            <td>Faster sync workflow. Also enables offline access to reference docs.</td>
+          </tr>
+          <tr>
+            <td>Google Docs</td>
+            <td>All MASTER documents are stored as Google Docs or Markdown. Jeannie can edit and version-control without special tools.</td>
+            <td>Version history in Google Docs provides a free audit trail.</td>
+          </tr>
+          <tr>
+            <td>Sharing & Permissions</td>
+            <td>Jeannie and Jennifer have Editor access to <code>_AI Operations/</code>. Team members have Viewer access. Prevents accidental edits.</td>
+            <td>Critical for maintaining document integrity.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="subsection">
+      <h3>Implementation at a Glance</h3>
+      <div class="phases">
+        <div class="phase-card">
+          <div class="phase-header" onclick="togglePhase(this)">
+            <div class="phase-num">1</div>
+            <div class="phase-info">
+              <div class="phase-label">Foundation</div>
+              <div class="phase-name">Google Workspace Setup</div>
+              <div class="phase-desc">Provision team accounts, configure Shared Drive, set permissions</div>
+            </div>
+            <div class="phase-meta">
+              <div class="phase-duration">~45 min</div>
+              <div class="phase-owner">Owner: Adam / Jeannie</div>
+            </div>
+            <span class="phase-chevron">▼</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-header" onclick="togglePhase(this)">
+            <div class="phase-num">2</div>
+            <div class="phase-info">
+              <div class="phase-label">Content Layer</div>
+              <div class="phase-name">Drive Architecture & Document Deployment</div>
+              <div class="phase-desc">Build folder structure, upload MASTER docs, configure permissions</div>
+            </div>
+            <div class="phase-meta">
+              <div class="phase-duration">~30 min</div>
+              <div class="phase-owner">Owner: Adam</div>
+            </div>
+            <span class="phase-chevron">▼</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-header" onclick="togglePhase(this)">
+            <div class="phase-num">3</div>
+            <div class="phase-info">
+              <div class="phase-label">AI Layer</div>
+              <div class="phase-name">Claude Pro Accounts & Projects</div>
+              <div class="phase-desc">Create accounts, build role Projects, load Project Knowledge</div>
+            </div>
+            <div class="phase-meta">
+              <div class="phase-duration">~60 min</div>
+              <div class="phase-owner">Owner: Adam + each team member</div>
+            </div>
+            <span class="phase-chevron">▼</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-header" onclick="togglePhase(this)">
+            <div class="phase-num">4</div>
+            <div class="phase-info">
+              <div class="phase-label">Go Live</div>
+              <div class="phase-name">Team Activation & Verification</div>
+              <div class="phase-desc">Install Drive for Desktop, train team, run verification prompts, hand off to Jeannie</div>
+            </div>
+            <div class="phase-meta">
+              <div class="phase-duration">~45 min</div>
+              <div class="phase-owner">Owner: Jeannie</div>
+            </div>
+            <span class="phase-chevron">▼</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-gold" style="margin-top: 28px;">
+      <strong>Before You Begin</strong>
+      Confirm that the @thewideawakening.com Google Workspace is active and that you (Adam) have Super Admin access. All subsequent steps require admin-level permissions in Workspace. If Jeannie currently holds admin, coordinate with her before Phase 1.
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════ PHASE 1 ══════════════════════════════════ -->
+  <div id="panel-phase1" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Phase 1</span>
+      <h2>Google Workspace<br><em>Foundation Setup</em></h2>
+    </div>
+
+    <p class="section-intro">Configure the Workspace accounts that will anchor every Claude Pro seat. Done once. Takes ~45 minutes. Requires Super Admin access to the @thewideawakening.com Workspace console.</p>
+
+    <div class="subsection">
+      <h3>Step-by-Step</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content">
+            <div class="step-title">Log into Google Workspace Admin Console</div>
+            <div class="step-detail">Go to <a href="https://admin.google.com" target="_blank">admin.google.com</a>. Sign in with your Super Admin @thewideawakening.com account. Verify you see the full admin dashboard — not just basic settings.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content">
+            <div class="step-title">Audit existing user accounts</div>
+            <div class="step-detail">Navigate to <strong>Directory → Users</strong>. Confirm which team members already have @thewideawakening.com accounts and which need to be created. You need accounts for: Jennifer, Jeannie, Admin Assistant, Program Manager, Video Editor, and Social Media Manager.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content">
+            <div class="step-title">Create any missing user accounts</div>
+            <div class="step-detail">
+              Click <strong>Add new user</strong> for each missing team member. Recommended naming convention:<br>
+              <code>firstname@thewideawakening.com</code> — or for roles —<br>
+              <code>programs@thewideawakening.com</code>, <code>socialmedia@thewideawakening.com</code>, <code>admin@thewideawakening.com</code>, <code>video@thewideawakening.com</code>
+            </div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">04</span>
+          <div class="step-content">
+            <div class="step-title">Assign Jeannie as secondary admin (if not already)</div>
+            <div class="step-detail">In <strong>Admin roles</strong>, assign Jeannie's account Super Admin or at minimum Drive Admin privileges. She'll need this to manage the Shared Drive and Sync Protocol independently of Adam.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">05</span>
+          <div class="step-content">
+            <div class="step-title">Verify Google Drive is enabled for all users</div>
+            <div class="step-detail">Go to <strong>Apps → Google Workspace → Drive and Docs</strong>. Confirm Drive is ON for all users in your org. Also confirm <strong>Shared Drives</strong> are enabled — this is a separate toggle under Drive settings.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">06</span>
+          <div class="step-content">
+            <div class="step-title">Enable external sharing for the AI Outputs folder</div>
+            <div class="step-detail">In <strong>Drive → Sharing settings</strong>, confirm that files can be shared with people outside the organization. This is needed so Claude outputs can be shared with external collaborators or clients when needed. Set to "Anyone with link can view" as the outer limit — actual sharing is controlled at the folder level.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">07</span>
+          <div class="step-content">
+            <div class="step-title">Confirm all accounts can access Drive for Desktop</div>
+            <div class="step-detail">In <strong>Drive → Drive for Desktop</strong>, confirm the app is allowed for your org. This is the setting that lets team members install the desktop sync client. If it shows "Blocked," toggle it to allowed before proceeding to Phase 4.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">08</span>
+          <div class="step-content">
+            <div class="step-title">Send welcome/credentials to any new accounts</div>
+            <div class="step-detail">Google Workspace will auto-generate a welcome email. Ensure each new team member receives their temporary password and knows to sign in at <a href="https://workspace.google.com" target="_blank">workspace.google.com</a>. Ask them to change their password before Phase 3.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout callout-teal" style="margin-top: 24px;">
+      <strong>Note on Claude Pro Billing</strong>
+      Claude Pro is $20/month per seat (as of June 2026). Each team member will have their own Claude Pro account registered to their @thewideawakening.com email. This keeps accounts as organizational assets. Budget: 5 seats × $20 = $100/month. Consider whether Jennifer needs a separate account or shares with leadership.
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 1 Deliverables</h3>
+      <ul class="checklist" id="p1-checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All team members have active @thewideawakening.com accounts</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Jeannie has admin-level Drive access</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Shared Drives feature is enabled in Workspace</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Drive for Desktop is allowed for the org</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All team members have logged in and changed passwords</span></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════ PHASE 2 ══════════════════════════════════ -->
+  <div id="panel-phase2" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Phase 2</span>
+      <h2>Drive Architecture &<br><em>Document Deployment</em></h2>
+    </div>
+
+    <p class="section-intro">Build the Shared Drive folder structure and populate it with all MASTER documents. This becomes the permanent knowledge base that feeds every team member's Claude Project.</p>
+
+    <div class="subsection">
+      <h3>Create the Shared Drive</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content">
+            <div class="step-title">Create a new Shared Drive named "TWA Claude OS"</div>
+            <div class="step-detail">In Google Drive, click <strong>Shared drives</strong> in the left sidebar → <strong>New</strong>. Name it <code>TWA Claude OS</code>. This is the organizational root for everything Claude-related.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content">
+            <div class="step-title">Add all team members with appropriate permissions</div>
+            <div class="step-detail">
+              Right-click the Shared Drive → <strong>Manage members</strong>. Add each team member:<br>
+              <code>jennifer@</code> → Content Manager<br>
+              <code>jeannie@</code> → Manager (full edit + admin)<br>
+              <code>admin@</code> → Contributor<br>
+              <code>programs@</code> → Contributor<br>
+              <code>video@</code> → Contributor<br>
+              <code>socialmedia@</code> → Contributor
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Folder Structure to Build</h3>
+      <div class="folder-tree">
+<span class="dir">TWA Claude OS/</span>  <span class="comment">← Shared Drive root</span><br>
+│<br>
+├── <span class="dir">_AI Operations/</span>  <span class="comment">← MASTER docs live here</span><br>
+│   ├── <span class="file">MASTER — Brand Voice.md</span><br>
+│   ├── <span class="file">MASTER — Avatar Profile.md</span><br>
+│   ├── <span class="file">MASTER — Offer Library.md</span><br>
+│   ├── <span class="file">MASTER — How To Set Up Claude.md</span><br>
+│   ├── <span class="file">MASTER — Output Naming Convention.md</span><br>
+│   ├── <span class="file">MASTER — README.md</span><br>
+│   └── <span class="dir">Avatar Research/</span>  <span class="comment">← evidentiary files, NOT in Claude</span><br>
+│       ├── <span class="file">briefing.md</span><br>
+│       ├── <span class="file">audience-segments.md</span><br>
+│       ├── <span class="file">language-bank.md</span><br>
+│       ├── <span class="file">data-and-citations.md</span><br>
+│       ├── <span class="file">competitive-landscape.md</span><br>
+│       └── <span class="file">master-research-full.md</span><br>
+│<br>
+├── <span class="dir">_AI Outputs/</span>  <span class="comment">← all Claude outputs route here</span><br>
+│   ├── <span class="dir">Jennifer — Leadership/</span><br>
+│   │   ├── <span class="dir">Drafts/</span><br>
+│   │   └── <span class="dir">Approved/</span><br>
+│   ├── <span class="dir">Jeannie — GM/</span><br>
+│   │   ├── <span class="dir">Drafts/</span><br>
+│   │   └── <span class="dir">Approved/</span><br>
+│   ├── <span class="dir">Admin Assistant/</span><br>
+│   │   ├── <span class="dir">Drafts/</span><br>
+│   │   └── <span class="dir">Approved/</span><br>
+│   ├── <span class="dir">Program Manager/</span><br>
+│   │   ├── <span class="dir">Drafts/</span><br>
+│   │   └── <span class="dir">Approved/</span><br>
+│   ├── <span class="dir">Video Editor/</span><br>
+│   │   ├── <span class="dir">Drafts/</span><br>
+│   │   └── <span class="dir">Approved/</span><br>
+│   └── <span class="dir">Social Media Manager/</span><br>
+│       ├── <span class="dir">Drafts/</span><br>
+│       └── <span class="dir">Approved/</span><br>
+│<br>
+├── <span class="dir">_AI Archive/</span>  <span class="comment">← retired/versioned docs</span><br>
+│<br>
+└── <span class="dir">_Team Reference/</span>  <span class="comment">← Prompt Playbooks, Sync Protocol</span><br>
+    ├── <span class="file">TWA Prompt Playbook Reference.html</span><br>
+    ├── <span class="file">TWA Claude OS Sync Protocol.html</span><br>
+    └── <span class="file">TWA Team Rollout Guide.html</span>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Upload MASTER Documents</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content">
+            <div class="step-title">Upload all six MASTER documents to <code>_AI Operations/</code></div>
+            <div class="step-detail">These already exist from prior work sessions. Copy or move them into the Shared Drive <code>_AI Operations/</code> folder. If they're currently in My Drive, drag them in — or use <strong>Move to</strong> rather than copy, so there's only one authoritative copy.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">04</span>
+          <div class="step-content">
+            <div class="step-title">Upload the six Avatar Research files to <code>_AI Operations/Avatar Research/</code></div>
+            <div class="step-detail">These are the evidentiary research files (briefing.md, audience-segments.md, etc.). They do not go into Claude Project Knowledge — they're reference material for Jeannie and Jennifer when updating the MASTER Avatar Profile.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">05</span>
+          <div class="step-content">
+            <div class="step-title">Upload HTML reference documents to <code>_Team Reference/</code></div>
+            <div class="step-detail">Move the Prompt Playbook Reference, Sync Protocol, Team Rollout Guide, and System Map into <code>_Team Reference/</code>. These are read-only reference tools for the team — not loaded into Claude.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">06</span>
+          <div class="step-content">
+            <div class="step-title">Set <code>_AI Operations/</code> permissions to Viewer for non-admin team members</div>
+            <div class="step-detail">Right-click <code>_AI Operations/</code> → <strong>Share</strong>. Confirm that Admin Assistant, Program Manager, Video Editor, and Social Media Manager have <strong>Viewer</strong> access — not Editor. Only Jeannie and Jennifer should be able to modify MASTER documents.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">07</span>
+          <div class="step-content">
+            <div class="step-title">Verify each team member can access their <code>_AI Outputs/[Role]/</code> folder</div>
+            <div class="step-detail">Share each role's output folder with that team member at <strong>Contributor</strong> level (can add files, can't delete others' files). Jeannie gets Manager access to all output folders — she's the review gate.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout callout-teal" style="margin-top: 16px;">
+      <strong>Important — One Source of Truth</strong>
+      Once MASTER documents are in the Shared Drive, any copies in personal My Drive folders should be deleted or converted to shortcuts. The Shared Drive version is the only version the team should ever reference or sync from.
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 2 Deliverables</h3>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Shared Drive "TWA Claude OS" created with all team members added</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Full folder structure built as shown above</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 MASTER documents uploaded to <code>_AI Operations/</code></span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 Avatar Research files uploaded to <code>_AI Operations/Avatar Research/</code></span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>HTML reference docs in <code>_Team Reference/</code></span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Permissions set: Viewer for _AI Operations, Contributor for own output folder</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ PHASE 3 ══════════════════════════════════ -->
+  <div id="panel-phase3" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Phase 3</span>
+      <h2>Claude Pro Accounts<br><em>& Project Configuration</em></h2>
+    </div>
+
+    <p class="section-intro">Create Claude Pro accounts for each team member, build their role-specific Projects, and load Project Knowledge. This is where the AI layer comes to life. Budget ~60 minutes — 10–15 minutes per team member.</p>
+
+    <div class="subsection">
+      <h3>Account Creation (per team member)</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content">
+            <div class="step-title">Each team member creates a Claude account at claude.ai</div>
+            <div class="step-detail">Go to <a href="https://claude.ai" target="_blank">claude.ai</a> → <strong>Sign up</strong>. Use their <code>@thewideawakening.com</code> Google Workspace email. Click <strong>Continue with Google</strong> — this keeps account creation frictionless and ties the Claude account to the Workspace identity.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content">
+            <div class="step-title">Upgrade each account to Claude Pro</div>
+            <div class="step-detail">In Claude → click account name → <strong>Upgrade to Pro</strong> → $20/month. Use a TWA credit card or expense each seat. Confirm billing name is the team member's Workspace account name — not a personal name — for organizational clarity.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content">
+            <div class="step-title">Confirm access to the Projects feature</div>
+            <div class="step-detail">In the Claude sidebar, confirm <strong>Projects</strong> appears. If it doesn't show immediately after Pro upgrade, wait 5 minutes and refresh. Projects is a Pro-only feature — it won't appear on free accounts.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Project Setup (per team member)</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">04</span>
+          <div class="step-content">
+            <div class="step-title">Create a new Project named "TWA — [Role Name]"</div>
+            <div class="step-detail">
+              Click <strong>Projects → New Project</strong>. Name it using the convention:<br>
+              <code>TWA — Jennifer Hough</code><br>
+              <code>TWA — GM · Jeannie</code><br>
+              <code>TWA — Social Media</code><br>
+              <code>TWA — Program Manager</code><br>
+              <code>TWA — Admin Assistant</code><br>
+              <code>TWA — Video Editor</code>
+            </div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">05</span>
+          <div class="step-content">
+            <div class="step-title">Paste the Project Instructions (system prompt)</div>
+            <div class="step-detail">In Project Settings → <strong>Project Instructions</strong>, paste the full TWA Claude OS system prompt (the shared Project Instructions document). This is the same base prompt for all team members. The role-specific customization comes from Project Knowledge, not the instructions — so all 6 Projects share the same instructions.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">06</span>
+          <div class="step-content">
+            <div class="step-title">Add the six MASTER documents as Project Knowledge</div>
+            <div class="step-detail">In Project Settings → <strong>Project Knowledge → Add Content → Paste Text</strong>. Open each MASTER document from the Shared Drive (via Drive for Desktop or browser), copy the full text, and paste into Claude. Add one document at a time. Name each piece exactly as the document is named in Drive: <code>MASTER — Brand Voice</code>, etc.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">07</span>
+          <div class="step-content">
+            <div class="step-title">Add the role-specific Prompt Playbook section</div>
+            <div class="step-detail">From the TWA Prompt Playbook Reference, copy the section for this team member's role and paste it as an additional Project Knowledge item named <code>Prompt Playbook — [Role]</code>. This gives them quick-reference prompts without needing to open the HTML document.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">08</span>
+          <div class="step-content">
+            <div class="step-title">Run the verification prompt</div>
+            <div class="step-detail">Start a new conversation in the Project. Type: <em>"Summarize TWA's current offer ecosystem and tell me who our ideal client is."</em> The response should accurately reflect both the Offer Library and Avatar Profile. If it gives generic answers, the Project Knowledge didn't load correctly — return to Step 6.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="callout callout-gold">
+      <strong>Project Knowledge Limit</strong>
+      Claude Pro Projects support up to approximately 200,000 tokens of Project Knowledge (roughly 150,000 words). The six MASTER documents plus a role Playbook should use well under half that. You have significant room to add more reference material as the system evolves.
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 3 Deliverables</h3>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>5–6 Claude Pro accounts created with @thewideawakening.com emails</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each account has a named role Project created</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Project Instructions (system prompt) pasted into all Projects</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 MASTER documents loaded into each Project's Knowledge</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Role-specific Prompt Playbook section loaded per team member</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Verification prompt run and passed for each Project</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ PHASE 4 ══════════════════════════════════ -->
+  <div id="panel-phase4" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Phase 4</span>
+      <h2>Team Activation<br><em>& Go-Live</em></h2>
+    </div>
+
+    <p class="section-intro">Install Drive for Desktop on all machines, run team orientation, execute verification prompts across all roles, and hand off operational ownership to Jeannie. This is the final phase before the Claude OS is live and self-sustaining.</p>
+
+    <div class="subsection">
+      <h3>Drive for Desktop Installation (every machine)</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content">
+            <div class="step-title">Download and install Google Drive for Desktop</div>
+            <div class="step-detail">Each team member goes to <a href="https://drive.google.com/drive/downloads" target="_blank">drive.google.com/drive/downloads</a> and downloads the installer for their OS (Mac or Windows). Install takes ~5 minutes. Sign in with @thewideawakening.com account when prompted.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content">
+            <div class="step-title">Add the "TWA Claude OS" Shared Drive to synced folders</div>
+            <div class="step-detail">In Drive for Desktop preferences → <strong>Google Drive tab</strong> → confirm <strong>Shared drives</strong> are set to sync. The <code>TWA Claude OS</code> Shared Drive should appear and begin syncing. On Mac it appears under <strong>Locations</strong> in Finder. On Windows it appears as a mapped drive letter (typically <code>G:\</code>).</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content">
+            <div class="step-title">Confirm the _AI Operations folder is accessible locally</div>
+            <div class="step-detail">Each team member should be able to navigate to <code>TWA Claude OS → _AI Operations</code> from their file browser and open a MASTER document without a browser. This confirms sync is working. If the folder is empty, wait 2–3 minutes for initial sync to complete.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Team Orientation</h3>
+      <ul class="step-list">
+        <li class="step-item">
+          <span class="step-num">04</span>
+          <div class="step-content">
+            <div class="step-title">Schedule a 30-minute team orientation call</div>
+            <div class="step-detail">Jeannie leads. Agenda: (1) show the Drive structure, (2) demo opening a MASTER doc from Drive for Desktop, (3) demo running a prompt in Claude Project, (4) show where outputs go, (5) explain the Sync Protocol. Record the call for team members in different time zones.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">05</span>
+          <div class="step-content">
+            <div class="step-title">Each team member runs their first real-world prompt</div>
+            <div class="step-detail">Not a test prompt — an actual task from their role. Social Media Manager: draft a caption for an upcoming Awakened Conversations event. Program Manager: outline the onboarding sequence for a new Flight School participant. This locks in the workflow muscle memory.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">06</span>
+          <div class="step-content">
+            <div class="step-title">Each team member saves their first output to the correct Drive folder</div>
+            <div class="step-detail">After running their first prompt, team members copy the output, create a new Google Doc in their <code>_AI Outputs/[Role]/Drafts/</code> folder, paste the content, and name it using the Output Naming Convention. Jeannie spot-checks naming compliance.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">07</span>
+          <div class="step-content">
+            <div class="step-title">Jeannie reviews first outputs from each team member</div>
+            <div class="step-detail">Jeannie reviews all Drafts from the orientation session. Anything that passes her quality and voice check gets moved to <code>Approved/</code>. Anything that needs revision goes back with a comment in the Google Doc. This establishes the review pipeline in practice, not just theory.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">08</span>
+          <div class="step-content">
+            <div class="step-title">Adam hands off to Jeannie as system owner</div>
+            <div class="step-detail">Adam's role shifts from builder to advisor. Jeannie takes ownership of: the Sync Protocol, new team member onboarding, and the monthly sync check. Adam remains available for architecture questions, upgrades, and Phase 2 (Supabase) planning. Formalize this in a brief handoff document.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Post-Launch: First 30 Days</h3>
+      <table class="info-table">
+        <thead>
+          <tr><th>Week</th><th>Action</th><th>Owner</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Week 1</td>
+            <td>All team members run at least 3 real work prompts through their Claude Project. Jeannie collects friction points.</td>
+            <td>Full team</td>
+          </tr>
+          <tr>
+            <td>Week 2</td>
+            <td>Jeannie debriefs with Adam on any workflow friction or Project Knowledge gaps. Updates made to MASTER docs if needed.</td>
+            <td>Jeannie + Adam</td>
+          </tr>
+          <tr>
+            <td>Week 3</td>
+            <td>First Sync Protocol check. Jeannie audits all Projects against current MASTER docs. Issues first sync notice if anything changed.</td>
+            <td>Jeannie</td>
+          </tr>
+          <tr>
+            <td>Week 4</td>
+            <td>Jennifer completes the Business Goals intake framework with Jeannie. Output is used to update Offer Library and Project Instructions.</td>
+            <td>Jennifer + Jeannie</td>
+          </tr>
+          <tr>
+            <td>Day 30</td>
+            <td>Brief retrospective: what's working, what's not, what to build next. Adam prepares Phase 2 (Supabase) options if warranted.</td>
+            <td>Adam + Jeannie</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-rust">
+      <strong>Common Failure Points to Watch</strong>
+      (1) Team members using personal Gmail accounts for Claude instead of Workspace emails — check on Day 1. (2) Outputs being saved to My Drive instead of Shared Drive — audit in Week 1. (3) MASTER docs having duplicate copies in personal My Drive — remove personal copies after Shared Drive is confirmed working.
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 4 Deliverables</h3>
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Drive for Desktop installed and synced on all team machines</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>30-minute team orientation completed (recorded)</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each team member has run and saved their first real output</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Jeannie has reviewed and approved/returned first round of outputs</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>System ownership formally handed off to Jeannie</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>30-day post-launch schedule confirmed</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ ROLES ══════════════════════════════════ -->
+  <div id="panel-roles" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Roles</span>
+      <h2>Team Setup<br><em>by Role</em></h2>
+    </div>
+
+    <p class="section-intro">Each role gets the same base Project Instructions and six MASTER documents, plus role-specific Project Knowledge. Here's exactly what each team member needs in their Claude Project.</p>
+
+    <div class="role-grid">
+
+      <div class="role-card gold">
+        <div class="role-name">Jennifer Hough</div>
+        <div class="role-email">jennifer@thewideawakening.com</div>
+        <span class="tag tag-gold">Leadership</span><span class="tag tag-ink">Founder</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>All 6 MASTER documents</li>
+          <li>Business Goals intake framework</li>
+          <li>Leadership Prompt Playbook section</li>
+          <li>Speaking & media brief templates</li>
+          <li>Book writing support prompts</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: strategic planning, content vision, book writing, program design</div>
+      </div>
+
+      <div class="role-card teal">
+        <div class="role-name">Jeannie Selda</div>
+        <div class="role-email">jeannie@thewideawakening.com</div>
+        <span class="tag tag-teal">General Manager</span><span class="tag tag-ink">Content Gate</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>All 6 MASTER documents</li>
+          <li>Full Prompt Playbook Reference</li>
+          <li>Sync Protocol document</li>
+          <li>Team communications templates</li>
+          <li>Review pipeline SOPs</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: team operations, content review, system maintenance, onboarding</div>
+      </div>
+
+      <div class="role-card rust">
+        <div class="role-name">Social Media Manager</div>
+        <div class="role-email">socialmedia@thewideawakening.com</div>
+        <span class="tag tag-rust">Social Media</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>Brand Voice MASTER</li>
+          <li>Avatar Profile MASTER</li>
+          <li>Offer Library MASTER</li>
+          <li>Social Media Prompt Playbook section</li>
+          <li>Content calendar templates</li>
+          <li>Platform-specific format guides</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: captions, content calendars, Reels scripts, engagement copy</div>
+      </div>
+
+      <div class="role-card violet">
+        <div class="role-name">Program Manager</div>
+        <div class="role-email">programs@thewideawakening.com</div>
+        <span class="tag tag-violet">Programs</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>All 6 MASTER documents</li>
+          <li>Program Manager Prompt Playbook</li>
+          <li>Flight School program materials</li>
+          <li>Participant journey templates</li>
+          <li>Launch planning frameworks</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: program logistics, participant comms, launch coordination</div>
+      </div>
+
+      <div class="role-card ink">
+        <div class="role-name">Admin Assistant</div>
+        <div class="role-email">admin@thewideawakening.com</div>
+        <span class="tag tag-ink">Administration</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>Brand Voice MASTER</li>
+          <li>Offer Library MASTER</li>
+          <li>Output Naming Convention MASTER</li>
+          <li>Admin Prompt Playbook section</li>
+          <li>Email templates</li>
+          <li>SOP library</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: email drafting, scheduling comms, SOPs, client correspondence</div>
+      </div>
+
+      <div class="role-card gold">
+        <div class="role-name">Video Editor</div>
+        <div class="role-email">video@thewideawakening.com</div>
+        <span class="tag tag-gold">Video</span>
+        <ul class="role-items" style="margin-top: 12px;">
+          <li>Brand Voice MASTER</li>
+          <li>Output Naming Convention MASTER</li>
+          <li>Video Editor Prompt Playbook section</li>
+          <li>Transcript → asset workflows</li>
+          <li>YouTube SEO templates</li>
+          <li>Chapter marker formats</li>
+        </ul>
+        <div style="margin-top: 14px; font-size: 11px; color: var(--text-muted);">Primary use: transcript repurposing, show notes, SEO metadata, Reels scripts</div>
+      </div>
+
+    </div>
+
+    <div class="subsection">
+      <h3>Output Naming Convention (quick reference)</h3>
+      <table class="info-table">
+        <thead>
+          <tr><th>Format</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Standard outputs</td>
+            <td><code>[ROLE]-[TYPE]-[TOPIC]-[YYYY-MM-DD]</code></td>
+          </tr>
+          <tr>
+            <td>Social post</td>
+            <td><code>SMM-POST-AwakCon-June-2026-06-07</code></td>
+          </tr>
+          <tr>
+            <td>Email draft</td>
+            <td><code>ADM-EMAIL-FlightSchool-Inquiry-2026-06-07</code></td>
+          </tr>
+          <tr>
+            <td>Program document</td>
+            <td><code>PM-DOC-FlightSchool-Onboarding-2026-06-07</code></td>
+          </tr>
+          <tr>
+            <td>Video asset</td>
+            <td><code>VID-SHOWNOTES-EP045-2026-06-07</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ CHECKLIST ══════════════════════════════════ -->
+  <div id="panel-checklist" class="panel">
+
+    <div class="section-title">
+      <span class="section-badge">Launch Checklist</span>
+      <h2>Full System<br><em>Go-Live Checklist</em></h2>
+    </div>
+
+    <p class="section-intro">The master checklist for Adam and Jeannie to track end-to-end implementation. Click items to mark complete. Progress updates live.</p>
+
+    <div class="progress-section">
+      <div class="progress-header">
+        <span class="progress-label">Implementation Progress</span>
+        <span class="progress-count" id="progress-count">0 / 28 complete</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 1 — Workspace Foundation</h3>
+      <ul class="checklist master-checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Super Admin access confirmed for @thewideawakening.com Workspace</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All team member accounts created or audited</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Jeannie assigned Drive admin privileges</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Shared Drives feature enabled in Workspace</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Drive for Desktop allowed for org</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All team members have logged in and changed passwords</span></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 2 — Drive Architecture</h3>
+      <ul class="checklist master-checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Shared Drive "TWA Claude OS" created</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All team members added with correct permission levels</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Full folder structure built (_AI Operations, _AI Outputs, _AI Archive, _Team Reference)</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 MASTER documents in _AI Operations</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 Avatar Research files in _AI Operations/Avatar Research</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>HTML reference docs in _Team Reference</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>_AI Operations permissions: Viewer for team, Editor for Jeannie + Jennifer only</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each role's _AI Outputs subfolder shared with correct team member</span></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 3 — Claude Projects</h3>
+      <ul class="checklist master-checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>6 Claude Pro accounts created with @thewideawakening.com emails</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All accounts upgraded to Pro ($20/seat)</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>6 named Projects created (one per team member)</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Project Instructions (system prompt) pasted into all 6 Projects</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 MASTER documents loaded into each Project's Knowledge</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Role-specific Prompt Playbook loaded per team member</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Verification prompt passed for all 6 Projects</span></li>
+      </ul>
+    </div>
+
+    <div class="subsection">
+      <h3>Phase 4 — Activation</h3>
+      <ul class="checklist master-checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Drive for Desktop installed and synced on all team machines</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Team orientation call completed and recorded</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each team member has run first real-world prompt</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each team member has saved first output to correct Drive folder using naming convention</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Jeannie has completed first review cycle</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>System ownership handed off to Jeannie (handoff doc signed)</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>30-day post-launch schedule confirmed and calendared</span></li>
+      </ul>
+    </div>
+
+    <div class="callout callout-teal" style="margin-top: 28px;">
+      <strong>You're Live</strong>
+      When all 28 items above are checked, the TWA Claude OS is fully operational. Jeannie owns the system. The team is running. Adam is on call for Phase 2 planning. Jennifer is creating from overflow, not from effort.
+    </div>
+
+  </div>
+
+</div><!-- /main -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-text">The Wide Awakening · <span>Claude OS</span> · Google Workspace Implementation Guide · v1.0 · June 2026</div>
+  <div class="footer-text">Built by <span>Chef Life Media LLC</span> · adam@cheflifemedia.com</div>
+</div>
+
+<script>
+  // Tab switching
+  function switchTab(panelId, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('panel-' + panelId).classList.add('active');
+    btn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Phase accordion
+  function togglePhase(header) {
+    const card = header.closest('.phase-card');
+    card.classList.toggle('open');
+  }
+
+  // Checklist toggle
+  function toggleCheck(li) {
+    li.classList.toggle('checked');
+    updateProgress();
+  }
+
+  // Progress bar
+  function updateProgress() {
+    const all = document.querySelectorAll('.master-checklist li');
+    const done = document.querySelectorAll('.master-checklist li.checked');
+    const total = all.length;
+    const count = done.length;
+    const pct = total ? (count / total * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-count').textContent = count + ' / ' + total + ' complete';
+  }
+
+  // Init
+  updateProgress();
+</script>
+</body>
+</html>
