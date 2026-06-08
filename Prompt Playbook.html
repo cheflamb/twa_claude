@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWA — Prompt Playbook Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;1,300&family=Syne:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── SCOPED TO #twa-playbook — safe inside WordPress ── */
+#twa-playbook {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1A1A18;
+  background: #F7F5F0;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#twa-playbook *, #twa-playbook *::before, #twa-playbook *::after {
+  box-sizing: border-box;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+#twa-playbook .pp-header {
+  background: #0F6E56;
+  color: #fff;
+  padding: 48px 40px 40px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+#twa-playbook .pp-header::after {
+  content: 'TWA';
+  position: absolute;
+  right: -20px; bottom: -30px;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 180px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.05);
+  line-height: 1;
+  pointer-events: none;
+}
+
+#twa-playbook .pp-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9FE1CB;
+  margin: 0 0 12px 0;
+}
+
+#twa-playbook .pp-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 300;
+  line-height: 1.1;
+  margin: 0 0 8px 0;
+  color: #fff;
+}
+
+#twa-playbook .pp-title em {
+  font-style: italic;
+  color: #9FE1CB;
+}
+
+#twa-playbook .pp-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  margin: 0 0 28px 0;
+}
+
+#twa-playbook .pp-stats {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+#twa-playbook .pp-stat-num {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1;
+  display: block;
+}
+
+#twa-playbook .pp-stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: block;
+  margin-top: 2px;
+}
+
+/* ── CONTROLS ────────────────────────────────────────── */
+#twa-playbook .pp-controls {
+  background: #FFFFFF;
+  border-bottom: 1px solid #E4E0D8;
+  border-top: 1px solid #E4E0D8;
+  padding: 16px 40px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#twa-playbook .pp-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+}
+
+#twa-playbook .pp-search-wrap svg {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888780;
+  width: 14px; height: 14px;
+}
+
+#twa-playbook .pp-search {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border: 1px solid #E4E0D8;
+  border-radius: 8px;
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 13px;
+  background: #F7F5F0;
+  color: #1A1A18;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#twa-playbook .pp-search:focus { border-color: #1D9E75; }
+#twa-playbook .pp-search::placeholder { color: #888780; }
+
+#twa-playbook .pp-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+#twa-playbook .pp-filter-btn {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1.5px solid #E4E0D8;
+  background: transparent;
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5F5E5A;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+#twa-playbook .pp-filter-btn:hover { border-color: #5F5E5A; color: #1A1A18; }
+#twa-playbook .pp-filter-btn.fa  { background: #0F6E56; border-color: #0F6E56; color: #fff; }
+#twa-playbook .pp-filter-btn.f-admin    { background: #E1F5EE; border-color: #1D9E75; color: #0F6E56; }
+#twa-playbook .pp-filter-btn.f-progmgr  { background: #EEEDFE; border-color: #534AB7; color: #534AB7; }
+#twa-playbook .pp-filter-btn.f-video    { background: #FAEEDA; border-color: #854F0B; color: #854F0B; }
+#twa-playbook .pp-filter-btn.f-social   { background: #FAECE7; border-color: #993C1D; color: #993C1D; }
+#twa-playbook .pp-filter-btn.f-jeannie  { background: #FCE9F1; border-color: #7C2D4E; color: #7C2D4E; }
+#twa-playbook .pp-filter-btn.f-jennifer { background: #E6F1FB; border-color: #185FA5; color: #185FA5; }
+#twa-playbook .pp-filter-btn.f-content  { background: #F1EFE8; border-color: #444441; color: #444441; }
+#twa-playbook .pp-filter-btn.f-agents   { background: #1A1A18; border-color: #1A1A18; color: #fff; }
+
+#twa-playbook .pp-result-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #888780;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── MAIN ────────────────────────────────────────────── */
+#twa-playbook .pp-main {
+  padding: 40px;
+  background: #F7F5F0;
+}
+
+/* ── ROLE SECTION ────────────────────────────────────── */
+#twa-playbook .pp-role-section {
+  margin-bottom: 56px;
+}
+
+#twa-playbook .pp-role-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid #E4E0D8;
+}
+
+#twa-playbook .pp-role-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+#twa-playbook .pp-role-name {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0;
+}
+
+#twa-playbook .pp-role-desc {
+  font-size: 13px;
+  color: #5F5E5A;
+  margin-top: 2px;
+}
+
+#twa-playbook .pp-role-count {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #888780;
+  background: #F7F5F0;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid #E4E0D8;
+}
+
+/* Role accent colors */
+#twa-playbook .rs-admin    .pp-role-header { border-color: #9FE1CB; }
+#twa-playbook .rs-admin    .pp-role-icon   { background: #E1F5EE; }
+#twa-playbook .rs-admin    .pp-role-name   { color: #0F6E56; }
+#twa-playbook .rs-progmgr  .pp-role-header { border-color: #CECBF6; }
+#twa-playbook .rs-progmgr  .pp-role-icon   { background: #EEEDFE; }
+#twa-playbook .rs-progmgr  .pp-role-name   { color: #534AB7; }
+#twa-playbook .rs-video    .pp-role-header { border-color: #FAC775; }
+#twa-playbook .rs-video    .pp-role-icon   { background: #FAEEDA; }
+#twa-playbook .rs-video    .pp-role-name   { color: #854F0B; }
+#twa-playbook .rs-social   .pp-role-header { border-color: #F5C4B3; }
+#twa-playbook .rs-social   .pp-role-icon   { background: #FAECE7; }
+#twa-playbook .rs-social   .pp-role-name   { color: #993C1D; }
+#twa-playbook .rs-jeannie  .pp-role-header { border-color: #F0B8D0; }
+#twa-playbook .rs-jeannie  .pp-role-icon   { background: #FCE9F1; }
+#twa-playbook .rs-jeannie  .pp-role-name   { color: #7C2D4E; }
+#twa-playbook .rs-jennifer .pp-role-header { border-color: #85B7EB; }
+#twa-playbook .rs-jennifer .pp-role-icon   { background: #E6F1FB; }
+#twa-playbook .rs-jennifer .pp-role-name   { color: #185FA5; }
+#twa-playbook .rs-content  .pp-role-header { border-color: #B4B2A9; }
+#twa-playbook .rs-content  .pp-role-icon   { background: #F1EFE8; }
+#twa-playbook .rs-content  .pp-role-name   { color: #444441; }
+#twa-playbook .rs-agents   .pp-role-header { border-color: #2C2C2A; }
+#twa-playbook .rs-agents   .pp-role-icon   { background: #1A1A18; }
+#twa-playbook .rs-agents   .pp-role-name   { color: #1A1A18; }
+
+/* ── PROMPT GRID ─────────────────────────────────────── */
+#twa-playbook .pp-prompt-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* ── PROMPT CARD ─────────────────────────────────────── */
+#twa-playbook .pp-card {
+  background: #FFFFFF;
+  border: 1px solid #E4E0D8;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+#twa-playbook .pp-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  border-radius: 12px 0 0 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+#twa-playbook .pp-card:hover {
+  border-color: #CCC8BE;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+#twa-playbook .pp-card:hover::before { opacity: 1; }
+#twa-playbook .pp-card.hidden { display: none; }
+
+#twa-playbook .rs-admin    .pp-card::before { background: #1D9E75; }
+#twa-playbook .rs-progmgr  .pp-card::before { background: #534AB7; }
+#twa-playbook .rs-video    .pp-card::before { background: #854F0B; }
+#twa-playbook .rs-social   .pp-card::before { background: #993C1D; }
+#twa-playbook .rs-jeannie  .pp-card::before { background: #7C2D4E; }
+#twa-playbook .rs-jennifer .pp-card::before { background: #185FA5; }
+#twa-playbook .rs-content  .pp-card::before { background: #444441; }
+#twa-playbook .rs-agents   .pp-card::before { background: #9FE1CB; }
+
+#twa-playbook .pp-card-head {
+  padding: 16px 18px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+#twa-playbook .pp-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+#twa-playbook .rs-admin    .pp-num { background: #E1F5EE; color: #0F6E56; }
+#twa-playbook .rs-progmgr  .pp-num { background: #EEEDFE; color: #534AB7; }
+#twa-playbook .rs-video    .pp-num { background: #FAEEDA; color: #854F0B; }
+#twa-playbook .rs-social   .pp-num { background: #FAECE7; color: #993C1D; }
+#twa-playbook .rs-jeannie  .pp-num { background: #FCE9F1; color: #7C2D4E; }
+#twa-playbook .rs-jennifer .pp-num { background: #E6F1FB; color: #185FA5; }
+#twa-playbook .rs-content  .pp-num { background: #F1EFE8; color: #444441; }
+#twa-playbook .rs-agents   .pp-num { background: #1A1A18; color: #9FE1CB; }
+
+#twa-playbook .pp-card-title {
+  font-family: 'Syne', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1A1A18;
+  margin: 0;
+}
+
+#twa-playbook .pp-card-use {
+  font-size: 12px;
+  color: #5F5E5A;
+  padding: 0 18px 10px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+#twa-playbook .pp-card-body {
+  background: #1A1A18;
+  margin: 0 12px 12px;
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #9FE1CB;
+  line-height: 1.6;
+  display: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-top: 0;
+}
+
+#twa-playbook .pp-card.expanded .pp-card-body { display: block; }
+
+#twa-playbook .pp-card-foot {
+  padding: 10px 18px 14px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-top: 1px solid #E4E0D8;
+}
+
+#twa-playbook .pp-expand-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  border: 1px solid #E4E0D8;
+  background: #F7F5F0;
+  color: #5F5E5A;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+#twa-playbook .pp-copy-btn {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 5px;
+  border: 1px solid #E4E0D8;
+  background: #F7F5F0;
+  color: #5F5E5A;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+#twa-playbook .pp-copy-btn:hover { background: #E1F5EE; border-color: #9FE1CB; color: #0F6E56; }
+#twa-playbook .pp-copy-btn.copied { background: #E1F5EE; border-color: #1D9E75; color: #0F6E56; }
+
+/* ── EMPTY STATE ─────────────────────────────────────── */
+#twa-playbook .pp-empty {
+  text-align: center;
+  padding: 80px 40px;
+  display: none;
+}
+#twa-playbook .pp-empty.visible { display: block; }
+#twa-playbook .pp-empty-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 24px;
+  color: #5F5E5A;
+  margin-bottom: 8px;
+}
+#twa-playbook .pp-empty-sub { font-size: 14px; color: #888780; }
+
+/* ── FOOTER ──────────────────────────────────────────── */
+#twa-playbook .pp-footer {
+  background: #0F6E56;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 24px 40px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 2;
+}
+#twa-playbook .pp-footer strong { color: #fff; }
+
+@media (max-width: 600px) {
+  #twa-playbook .pp-header,
+  #twa-playbook .pp-controls,
+  #twa-playbook .pp-main { padding-left: 20px; padding-right: 20px; }
+  #twa-playbook .pp-prompt-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="twa-playbook">
+
+  <!-- HEADER -->
+  <div class="pp-header">
+    <p class="pp-eyebrow">The Wide Awakening · AI Operations</p>
+    <h1 class="pp-title">Prompt Playbook<br><em>Reference Guide</em></h1>
+    <p class="pp-sub">80 role-specific prompts across 8 functions — plus agents, MCPs &amp; automation</p>
+    <div class="pp-stats">
+      <div><span class="pp-stat-num">80</span><span class="pp-stat-label">Total prompts</span></div>
+      <div><span class="pp-stat-num">8</span><span class="pp-stat-label">Role playbooks</span></div>
+      <div><span class="pp-stat-num">5</span><span class="pp-stat-label">Agent templates</span></div>
+      <div><span class="pp-stat-num">5</span><span class="pp-stat-label">MCP integrations</span></div>
+    </div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="pp-controls">
+    <div class="pp-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="pp-search" id="pp-search" type="text" placeholder="Search prompts..." oninput="ppFilterAll()">
+    </div>
+    <div class="pp-filters">
+      <button class="pp-filter-btn fa"  data-filter="all"      onclick="ppSetFilter('all',this)">All</button>
+      <button class="pp-filter-btn"     data-filter="admin"    onclick="ppSetFilter('admin',this)">Admin</button>
+      <button class="pp-filter-btn"     data-filter="progmgr"  onclick="ppSetFilter('progmgr',this)">Prog Mgr</button>
+      <button class="pp-filter-btn"     data-filter="video"    onclick="ppSetFilter('video',this)">Video</button>
+      <button class="pp-filter-btn"     data-filter="social"   onclick="ppSetFilter('social',this)">Social</button>
+      <button class="pp-filter-btn"     data-filter="jeannie"  onclick="ppSetFilter('jeannie',this)">Jeannie</button>
+      <button class="pp-filter-btn"     data-filter="jennifer" onclick="ppSetFilter('jennifer',this)">Jennifer</button>
+      <button class="pp-filter-btn"     data-filter="content"  onclick="ppSetFilter('content',this)">Content</button>
+      <button class="pp-filter-btn"     data-filter="agents"   onclick="ppSetFilter('agents',this)">Agents</button>
+    </div>
+    <div class="pp-result-count" id="pp-result-count">80 prompts</div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="pp-main" id="pp-main"></div>
+  <div class="pp-empty" id="pp-empty">
+    <div class="pp-empty-title">No prompts found</div>
+    <div class="pp-empty-sub">Try a different search term or clear the filter</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="pp-footer">
+    <strong>The Wide Awakening × Claude — Prompt Playbook Reference</strong><br>
+    Prepared by Chef Adam M. Lamb · Chef Life Media LLC · March 2026<br>
+    Confidential · Internal Use Only · Part of the TWA AI Operations System
+  </div>
+
+</div><!-- /#twa-playbook -->
+
+<script>
+const ROLES = [
+  {
+    id: 'admin', name: 'Administrative', icon: '📋',
+    desc: 'Research, communications, SOPs, scheduling, and team operations',
+    prompts: [
+      { num:'01', title:'Collaborator Research Brief', use:'Researching a potential guest, speaker, collaborator, or media contact before Jennifer or Jeannie connects with them.',
+        body:`I'm the TWA admin. Please research [Full Name] and their work with [Organization / Role].
+
+Give me:
+1. Background — who they are, origin story, credentials
+2. Messaging — their core philosophy and signature language
+3. Audience — who they serve, platform size if known
+4. Signature frameworks or programs they're known for
+5. Recent media appearances, interviews, or launches (last 12 months)
+6. 3 specific alignment points with The Wide Awakening's mission and avatar
+7. Any potential concerns or misalignments to flag
+
+Format as a structured briefing document I can share with Jennifer or Jeannie.`},
+      { num:'02', title:'Outbound Email Draft', use:'Drafting any outgoing email from Jennifer or the TWA team — outreach, follow-up, announcements, or relationship-building.',
+        body:`I'm the TWA admin. Please draft an email from Jennifer to [recipient name / role].
+
+Purpose: [What is the goal of this email?]
+Context: [Any relevant background — relationship, prior conversation, timing]
+Tone: [Warm and personal / Professional and direct / Excited / Gentle follow-up]
+Key points to include: [List 2–4 things the email must communicate]
+Call to action: [What should the recipient do after reading?]
+
+Write in Jennifer's voice. Keep it concise. No corporate language.`},
+      { num:'03', title:'Standard Operating Procedure', use:'Turning a verbal process or recurring task into a clean, repeatable SOP any team member can follow.',
+        body:`I'm the TWA admin. Please turn this process description into a clean SOP.
+
+Process name: [Name of the task or workflow]
+Who performs this: [Role]
+Frequency: [Daily / Weekly / Per launch / As needed]
+Tools involved: [Google Drive, Slack, Trello, Claude, etc.]
+
+Raw description of the process:
+[Paste or describe the process — as rough as you like]
+
+Format it as:
+- Purpose (one sentence)
+- Tools required
+- Step-by-step instructions (numbered, clear, no assumptions)
+- What "done" looks like
+- Who to contact if something goes wrong`},
+      { num:'04', title:'Meeting Agenda Builder', use:'Preparing for an internal team meeting, a session with Jennifer, or a vendor/collaborator call.',
+        body:`I'm the TWA admin. Please build a meeting agenda for the following:
+
+Meeting type: [Team sync / Strategy session / Onboarding / Review / External call]
+Attendees: [List roles or names]
+Duration: [30 / 45 / 60 / 90 minutes]
+Primary goal of this meeting: [What must be decided or accomplished?]
+Topics to cover: [List 3–6 topics]
+Any pre-reading or prep required: [Yes/No — describe if yes]
+
+Format it as a clean, timed agenda with space for notes on each item.`},
+      { num:'05', title:'New Team Member Onboarding Doc', use:'A new person is joining the TWA team and needs a role-specific welcome document.',
+        body:`I'm the TWA admin. Please draft an onboarding document for a new [role name] joining The Wide Awakening.
+
+Include:
+1. Welcome message in TWA's voice (warm, expansive, not corporate)
+2. Overview of their role and how it fits the team
+3. Their top 3 priorities in the first 30 days
+4. Key tools they'll use (Google Drive, Slack, Trello, Claude)
+5. Who to go to for what (with roles, not names)
+6. TWA's 3 golden operational rules
+7. How to save and name files
+8. First week checklist
+
+Keep it welcoming, clear, and completely free of corporate jargon.`},
+      { num:'06', title:'Event Logistics Checklist', use:'Preparing for any upcoming event — webinar, live call, retreat, or program launch.',
+        body:`I'm the TWA admin. Please build a logistics checklist for the following:
+
+Event type: [Webinar / Live Zoom / Retreat / Program launch / In-person event]
+Event name: [Name]
+Date and time: [Date, time, timezone]
+Estimated attendance: [Number]
+Platform: [Zoom / Kajabi / Members platform / In-person]
+Lead time from today: [X days/weeks]
+
+Generate a complete pre-event, day-of, and post-event checklist.
+Include: tech setup, communication tasks, Drive file prep, Trello cards needed, and follow-up actions.
+Flag any items that need Jennifer's or Jeannie's direct input.`},
+      { num:'07', title:'Internal Team Announcement', use:'Communicating a team update, policy change, system update, or important news to the TWA team.',
+        body:`I'm the TWA admin. Please draft an internal team announcement.
+
+What's being announced: [Describe the news, change, or update]
+Who it affects: [All team / Specific roles]
+Effective date: [When does this take effect?]
+Action required from team: [Yes/No — if yes, what?]
+Tone: [Informational / Excited / Sensitive / Routine]
+
+Keep it brief, clear, and in keeping with TWA's warm communication style.
+Not corporate. Not stiff. Just clear and human.`},
+      { num:'08', title:'Vendor or Service Research', use:'Evaluating a new tool, platform, vendor, or service provider for the business.',
+        body:`I'm the TWA admin. Please research and compare options for [what we need].
+
+Context: [Describe what TWA is trying to accomplish or the problem we're solving]
+Budget range: [If known]
+Must-haves: [List non-negotiables]
+Nice-to-haves: [List preferences]
+Team size using it: [Number of people]
+Current tools it must integrate with: [Google Drive, Slack, Trello, Kajabi, etc.]
+
+Recommend 3 options. For each: what it does, pricing, pros, cons, and your recommendation on fit for TWA.`},
+      { num:'09', title:'Post-Event Follow-Up Email', use:'Sending a post-event thank you, recap, or next-step email to attendees, guests, or collaborators.',
+        body:`I'm the TWA admin. Please draft a follow-up email from Jennifer after [event name / call type].
+
+Recipient: [Individual / All attendees / Guest / Collaborator]
+Event or call: [Brief description of what happened]
+Key moments to reference: [Any specific highlights, breakthroughs, or talking points]
+Next step we want them to take: [Link to join / Book a call / Reply / Purchase]
+Tone: [Warm and personal / Excited / Grateful / Soft invitation]
+
+Write in Jennifer's voice. Reference the felt experience, not just the logistics.
+Make the reader feel seen and inspired to take the next step.`},
+      { num:'10', title:'Weekly Admin Digest', use:'Preparing a weekly summary of what happened, what\'s coming, and what needs attention — for Jeannie or Jennifer.',
+        body:`I'm the TWA admin. Please help me draft the weekly admin digest for [week of DATE].
+
+Completed this week:
+[Paste a rough list of what got done]
+
+In progress:
+[List anything mid-stream]
+
+Coming up next week:
+[List upcoming deadlines, events, or tasks]
+
+Needs decision or input from Jennifer/Jeannie:
+[List anything blocked or requiring leadership input]
+
+Format as a clean, scannable digest. Use headers and short bullet points.
+No fluff. Just the essentials in a format that takes 2 minutes to read.`},
+    ]
+  },
+  {
+    id: 'progmgr', name: 'Program Manager', icon: '🗂️',
+    desc: 'Program design, launches, retreats, avatar research, and financial modeling',
+    prompts: [
+      { num:'01', title:'Webinar or Live Event Outline', use:'Building the run-of-show for any upcoming live event, Awakened Conversations, activation, or webinar.', body:`I'm the TWA program manager. Please build a complete outline for the following live event:
+
+Event name: [Name]
+Format: [Webinar / Live Zoom / In-person / Hybrid]
+Duration: [60 / 75 / 90 minutes]
+Primary goal: [What must the audience leave feeling, knowing, or deciding?]
+Offer being made (if any): [Program name or "none"]
+Audience: [New leads / Existing members / Mixed]
+Jennifer's key teaching or theme: [Describe in 1–3 sentences]
+
+Produce:
+- Complete run-of-show with timing
+- Opening hook and welcome framing
+- Teaching section breakdown
+- Activation or experiential moment
+- Offer transition (if applicable) — natural, not pushy
+- Close and call to action
+- Tech and logistics notes`},
+      { num:'02', title:'New Program Design Framework', use:'Developing a new program, course, or group container — from concept to curriculum map.', body:`I'm the TWA program manager. Please help design a new program for TWA.
+
+Program concept: [Describe the idea in 2–4 sentences]
+Target client: [Which segment of the TWA avatar?]
+Duration: [Weeks / Months / Single day / Ongoing]
+Format: [Cohort / Self-paced / Live calls / Hybrid]
+Price point vision: [Low-ticket / Mid-tier / High-ticket / Unknown]
+Transformation promise: [What will participants embody, experience, or shift into?]
+How it fits the offer ecosystem: [What comes before and after this program?]
+
+Produce:
+- Program name options (3)
+- Transformation arc (beginning → middle → end state)
+- Module or session breakdown
+- Learning outcomes per module
+- Suggested pricing rationale
+- 3 launch angle options`},
+      { num:'03', title:'Avatar Deep-Dive Research', use:'Current, specific intelligence on what TWA\'s ideal client is experiencing, searching for, and responding to.', body:`I'm the TWA program manager. Please research the current state of our avatar.
+
+Avatar segment: [Conscious leaders / Spiritual entrepreneurs / Women in midlife transition / etc.]
+Platform focus: [Where are they gathering — podcasts, Instagram, YouTube, communities?]
+Research goals:
+1. What pain points are they currently most vocal about?
+2. What language do they use to describe their experience?
+3. What solutions have they tried that haven't worked?
+4. What are they hungry for that they can't seem to find?
+5. Who else is serving them — and what's missing from those offerings?
+
+Synthesize into a 1-page intelligence brief I can bring to Jennifer and Jeannie.
+Include direct quotes or language patterns wherever possible.`},
+      { num:'04', title:'Launch Campaign Architecture', use:'Planning a full launch sequence for any new or recurring offer — from pre-launch through close.', body:`I'm the TWA program manager. Please build a launch campaign architecture for:
+
+Offer: [Program / Event / Membership tier / Retreat]
+Launch window: [Start date to close date]
+Lead time available: [X weeks]
+Primary channels: [Email / Instagram / Facebook / Podcast / All]
+List/audience size (approximate): [Number]
+Price point: [Amount]
+Key differentiator: [What makes this offer unlike anything else available?]
+
+Produce:
+- Pre-launch phase (building anticipation)
+- Launch phase (opening to close)
+- Email sequence touchpoints (subject line + purpose for each)
+- Social content moments aligned to each phase
+- Objection-handling moments
+- Cart close sequence
+- Post-launch follow-up`},
+      { num:'05', title:'Retreat Planning Framework', use:'Beginning the design or logistics planning for any TWA retreat or immersive experience.', body:`I'm the TWA program manager. Please build a retreat planning framework for:
+
+Retreat concept: [Theme / Experience type]
+Duration: [Days]
+Estimated attendance: [Number]
+Location type: [Destination / Local / Venue-based / Nature-based]
+Price point: [Amount per person]
+Jennifer's role: [Lead facilitator / Co-facilitator / Keynote only]
+Target launch date for applications/registration: [Date]
+
+Produce:
+- Participant journey arc (from arrival to integration)
+- Daily schedule template
+- Pre-retreat preparation sequence for participants
+- Vendor and venue requirements list
+- Budget framework (categories only — we'll fill in numbers)
+- Post-retreat follow-up and upsell pathway`},
+      { num:'06', title:'Program Debrief & Improvement', use:'After any program or event concludes — capturing what worked, what didn\'t, and what to evolve.', body:`I'm the TWA program manager. Please help me build a post-program debrief for:
+
+Program name: [Name]
+Duration: [How long it ran]
+Enrollment: [Number of participants]
+Completion rate: [% if known]
+What went well: [Paste rough notes]
+What felt off or incomplete: [Paste rough notes]
+Participant feedback themes: [Paste any feedback received]
+
+Produce:
+- Clean debrief summary
+- Key wins to preserve in the next iteration
+- 3–5 specific improvements for next run
+- Recommendation: run again as-is / evolve / retire / pivot`},
+      { num:'07', title:'Speaker or Guest Briefing Doc', use:'Preparing a briefing package for any guest teacher, speaker, or collaborator appearing in a TWA event.', body:`I'm the TWA program manager. Please draft a guest briefing document for:
+
+Guest name: [Name]
+Their role in the event: [Speaker / Co-facilitator / Interviewee / Panel member]
+Event name: [Name]
+Event date: [Date]
+Audience: [Describe TWA's community briefly]
+Topics they'll cover: [List 2–4]
+Time allocated: [Minutes]
+
+Include: welcome and context, audience expectations, format overview, time slot, tech requirements, and contact info for day-of questions.`},
+      { num:'08', title:'Financial Projection', use:'Running a scenario model before committing to a launch — understanding revenue potential and break-even math.', body:`I'm the TWA program manager. Please build a financial projection for:
+
+Offer: [Name]
+Price point: [Amount]
+Enrollment goal (optimistic): [Number]
+Enrollment goal (conservative): [Number]
+Enrollment goal (minimum viable): [Number]
+Launch costs to consider: [Ads / Contractor / Tech / Event costs]
+Delivery costs: [Jennifer's time / Platform fees / Materials]
+
+Produce:
+- Revenue scenarios (optimistic / conservative / minimum)
+- Break-even enrollment number
+- Projected profit margin per scenario
+- ROI on any launch investment
+- Key assumptions I should validate before committing
+Format in a clean table I can share with Jennifer and Jeannie.`},
+      { num:'09', title:'Member Retention Strategy', use:'Membership or program engagement is dropping — a plan to reconnect with inactive or at-risk members.', body:`I'm the TWA program manager. Please build a re-engagement strategy for:
+
+Program or community: [Agents of Awakening / Specific program]
+Segment to re-engage: [Members inactive for X weeks / Members who didn't renew / etc.]
+What we know about why they disengaged: [Describe if known — or "unknown"]
+What we have to offer them: [Current active programs, events, or bonuses]
+
+Produce:
+- 3-phase re-engagement sequence (email + community touchpoints)
+- Subject lines for each email
+- Community post or live event idea to reignite energy
+- Win-back offer recommendation if needed`},
+      { num:'10', title:'Quarterly Program Calendar', use:'Planning ahead for the next 90 days across all TWA offers — ensuring nothing overlaps or falls through the cracks.', body:`I'm the TWA program manager. Please help me build the TWA program calendar for [Quarter / Dates].
+
+Active ongoing programs: [List any live programs running this quarter]
+Planned launches: [List any new offers going to market]
+Recurring events: [Monthly Awakened Conversations, etc.]
+Jennifer's known unavailability: [Dates she's traveling, speaking elsewhere, or offline]
+Revenue goal for the quarter: [Amount — optional but helpful]
+
+Produce:
+- Month-by-month calendar view
+- Launch windows that avoid conflict
+- Content and email timeline per offer
+- Team resource requirements per month
+- Risks or gaps to flag to Jennifer and Jeannie`},
+    ]
+  },
+  {
+    id: 'video', name: 'Video Editor', icon: '🎬',
+    desc: 'Transcript mining, SEO metadata, repurposing plans, and clip concepts',
+    prompts: [
+      {num:'01',title:'Short-Form Clip Concepts from Transcript',use:'You have a recording from any TWA event and need to identify the best moments for Reels, Shorts, or TikTok.',body:`I'm the TWA video editor. I have a transcript from [event name / date / type].
+Please identify the 10 best moments for short-form video clips.
+
+For each clip:
+1. Timestamp range or quote that starts/ends the clip
+2. Why this moment works for short-form
+3. Suggested caption hook (first line that stops the scroll)
+4. Recommended clip length (15s / 30s / 60s / 90s)
+5. Which platform fits best (Reels / Shorts / TikTok / All)
+6. Suggested on-screen text overlay
+
+[PASTE TRANSCRIPT BELOW]`},
+      {num:'02',title:'YouTube SEO Metadata Package',use:'Uploading any video to YouTube and needing complete, optimized metadata.',body:`I'm the TWA video editor. Please generate complete YouTube metadata for this video.
+
+Video title (working): [Current title]
+Video topic: [Describe in 2–3 sentences]
+Jennifer's key message: [The core idea]
+Target viewer: [TWA's ideal client]
+Video length: [Minutes]
+Keywords to rank for: [List if known]
+
+Generate:
+1. 3 optimized title options (include primary keyword, under 60 chars)
+2. Description (300 words) — hook, summary, CTA, links placeholder
+3. 20 tags (mix of broad and specific)
+4. Chapter markers — use this transcript: [PASTE]
+5. Thumbnail text suggestion (under 6 words)
+6. Pinned comment suggestion`},
+      {num:'03',title:'Full Repurposing Plan from Recording',use:'You have a recording and want to extract maximum value across all formats.',body:`I'm the TWA video editor. I have a [type of recording] called [name] that is [length] long.
+Please build a complete repurposing plan.
+
+Content summary: [Describe or paste transcript]
+
+Produce:
+1. YouTube full-length upload (title + description)
+2. 3–5 short-form clip concepts
+3. 2 blog post angles derived from the content
+4. 5 social captions (quote-driven or insight-driven)
+5. 1 email subject line + opening paragraph
+6. 1 lead magnet concept
+7. Podcast episode description (if audio stripped)
+
+For each asset: what it is, where it goes, what makes it worth creating.`},
+      {num:'04',title:'Members Platform Video Description',use:'Uploading a training video to Kajabi, the Agents of Awakening platform, or any course environment.',body:`I'm the TWA video editor. Please write a video description for the TWA members platform.
+
+Video title: [Title]
+Module or program: [Program name / standalone]
+What this video teaches or activates: [Describe in 2–4 sentences]
+Length: [Minutes]
+Any tool, framework, or exercise introduced: [Name if applicable]
+What the viewer should do after watching: [Journal / Next video / Practice / etc.]
+
+Write 100–150 words in Jennifer's voice.
+Include: what they'll experience, one key insight, and a brief prompt for what to do next.`},
+      {num:'05',title:'Transcript Cleanup and Formatting',use:'You have a raw auto-generated transcript that needs to be cleaned up for use elsewhere.',body:`I'm the TWA video editor. Please clean up this raw transcript.
+
+Source: [Zoom / Otter / Rev / Other]
+Intended use: [Blog post / Email / Internal reference / Caption sourcing]
+Jennifer's voice should be preserved — do not paraphrase or sanitize her language.
+
+Instructions:
+- Remove filler words unless they add personality
+- Fix run-on sentences into readable paragraphs
+- Remove false starts and repeated phrases
+- Add paragraph breaks where topics shift
+- Bold any particularly quotable or powerful lines
+- Flag any moments that are unclear
+
+[PASTE RAW TRANSCRIPT BELOW]`},
+      {num:'06',title:'Reel or Short Script from a Quote',use:'You have a strong Jennifer quote and want to build a complete short-form video script around it.',body:`I'm the TWA video editor. Please build a short-form video script around this Jennifer quote:
+
+Quote: "[Paste the quote]"
+
+Video length target: [30s / 60s / 90s]
+Platform: [Instagram Reels / YouTube Shorts / TikTok]
+Visual style: [Talking head / B-roll / Text overlay / Mixed]
+
+Script should include:
+1. Hook (first 3 seconds)
+2. Setup (context for the quote — 10–15 seconds)
+3. The quote delivery (with suggested pacing notes)
+4. Expansion (why this matters — 15–20 seconds)
+5. Close + CTA
+
+Write it as Jennifer would say it — natural, warm, direct.`},
+      {num:'07',title:'Podcast Episode Show Notes',use:'A Jennifer interview or conversation has been released as a podcast and needs complete show notes.',body:`I'm the TWA video editor. Please write show notes for this podcast episode.
+
+Episode title: [Title]
+Guest (if any): [Name and brief description]
+Platform: [Jennifer's podcast / Guest appearance on another show]
+Episode length: [Minutes]
+Core topics covered: [List 3–5]
+Key insights or quotes: [Paste 2–3 standout moments]
+Links to include: [TWA website / offer / book / guest links]
+
+Produce:
+1. Episode description (200 words) — in Jennifer's voice
+2. 5 key takeaways (bullet format)
+3. 3 timestamps with chapter descriptions
+4. Guest bio blurb (if applicable)
+5. Episode hashtags (10)
+6. Social pull-quote (under 150 chars)`},
+      {num:'08',title:'B-Roll Shot List',use:'Planning a video that needs B-roll footage — translating a concept into a practical shot list.',body:`I'm the TWA video editor. Please create a B-roll shot list for the following:
+
+Video topic or theme: [e.g. "living in overflow" / "the miracle zone"]
+Video format: [Talking head with B-roll / Full B-roll / Montage]
+Tone: [Expansive and aspirational / Intimate and grounded / Energetic]
+Setting options available: [Indoor / Outdoor / Jennifer's home / Studio / Nature]
+Length of B-roll needed: [Total seconds or minutes]
+
+Provide:
+1. 15–20 specific shot descriptions
+2. Suggested mood/color palette for editing
+3. Music style recommendation (genre/energy — no specific songs)
+4. Any text overlay moments worth considering
+5. One "hero shot" idea that could also serve as a thumbnail`},
+      {num:'09',title:'Video Repurposing Calendar',use:'Planning a month of content derived from existing video assets in the TWA library.',body:`I'm the TWA video editor. Please help me build a video repurposing calendar for [Month].
+
+Available source material:
+[List recordings we have — titles, dates, lengths, where they live in Drive]
+
+Publishing targets:
+- YouTube: [X videos per week]
+- Instagram Reels: [X per week]
+- YouTube Shorts: [X per week]
+- Podcast: [X episodes if applicable]
+
+Strategic focus for this month: [Upcoming launch / Evergreen / Community building]
+
+Produce:
+- Week-by-week publishing schedule
+- Which source material feeds which assets
+- Editing priority order
+- Any gaps to flag to the program manager`},
+      {num:'10',title:'Testimonial Video Guide for Clients',use:'Collecting video testimonials from TWA clients — a guide to send them so they produce usable footage.',body:`I'm the TWA video editor. Please create a testimonial video guide for TWA clients.
+
+Program or experience being testimonial'd: [Name]
+What transformation we're looking for: [Describe the before/after]
+Where this testimonial will be used: [Landing page / Social / YouTube / All]
+Ideal video length: [60–90 seconds preferred]
+
+Produce:
+1. A warm, encouraging intro letter to the client (in Jennifer's voice)
+2. 5 specific prompt questions they should answer on camera
+3. What NOT to say (overly vague or misaligned language)
+4. Simple recording tips (lighting, sound, framing)
+5. How to send us the file
+6. Permission/release language (simple, one sentence)`},
+    ]
+  },
+  {
+    id: 'social', name: 'Social Media', icon: '📱',
+    desc: 'Content calendars, captions, hashtag strategy, avatar research, and analytics',
+    prompts: [
+      {num:'01',title:'Monthly Content Calendar',use:'Planning an entire month of content across platforms — especially ahead of a launch or key event.',body:`I'm the TWA social media manager. Please build a [X]-day content calendar for [platform(s)].
+
+Strategic focus: [Upcoming offer / Launch / Evergreen / Community building / Mixed]
+Offer or event to promote: [Name + date if applicable]
+Content mix:
+  - Educational / insight posts: [X%]
+  - Promotional / offer posts: [X%]
+  - Community / connection posts: [X%]
+  - Jennifer's personal voice / story posts: [X%]
+Start date: [Date]
+Posting frequency: [X per week / per day]
+
+For each day include:
+- Post type (Reel / Carousel / Static / Story / Text)
+- Caption angle or hook
+- 3–5 hashtags
+- Any CTA
+Flag which posts need Jennifer's personal story or photo.`},
+      {num:'02',title:'Caption Writing (Single Post)',use:'You need a polished, on-voice caption for a specific post — image, Reel, or carousel.',body:`I'm the TWA social media manager. Please write 3 caption options for this post.
+
+Platform: [Instagram / Facebook / LinkedIn]
+Post type: [Static image / Reel / Carousel]
+Topic or theme: [What this post is about]
+Key message or insight: [The one thing we want the reader to feel or know]
+Offer to mention (if any): [Name or "none"]
+Tone: [Expansive and wise / Playful and light / Activating and direct / Personal story]
+Length: [Short under 100 words / Medium 150–250 / Long 250+]
+End with: [Question / CTA / Reflection prompt / "Link in bio"]
+
+All three options in Jennifer's voice.
+No corporate language. No generic self-help phrases.`},
+      {num:'03',title:'Avatar Language Research',use:'Fresh intelligence on what TWA\'s ideal client is currently saying, searching for, and responding to.',body:`I'm the TWA social media manager. Please research what our avatar is currently talking about.
+
+Avatar description: [Conscious leaders / Spiritual entrepreneurs / Women in midlife / etc.]
+Platforms to research: [Instagram / Facebook groups / Reddit / YouTube comments / Podcasts]
+Timeframe: Current — last 30–60 days if possible
+
+Find and synthesize:
+1. The 5 most common pain points they're expressing right now
+2. The exact language and phrases they use to describe their experience
+3. Questions they're asking that aren't being well answered
+4. Content styles or formats they're engaging with most
+5. Gaps in the conversation TWA could uniquely own
+
+Format as a 1-page content intelligence brief.`},
+      {num:'04',title:'Reel Hook Writing',use:'You have a Reel concept or video ready but need a scroll-stopping first line or on-screen hook.',body:`I'm the TWA social media manager. Please write 10 hook options for this Reel.
+
+Reel topic: [What the video is about]
+Jennifer's key message: [The core insight or teaching]
+Target platform: [Instagram Reels / YouTube Shorts / TikTok]
+Tone: [Provocative / Warm / Direct / Curious / Bold]
+
+Each hook should:
+- Be under 8 words
+- Create an open loop or provoke curiosity
+- Speak directly to the TWA avatar's experience
+- NOT start with "I" or "We"
+- NOT be a generic self-help cliché
+
+Give me the 10 options ranked by confidence.`},
+      {num:'05',title:'Hashtag Strategy by Content Type',use:'Building or refreshing the hashtag sets used across TWA\'s content categories.',body:`I'm the TWA social media manager. Please build a hashtag strategy for TWA on [platform].
+
+Content categories we post regularly:
+1. [e.g. Conscious leadership]
+2. [e.g. Spiritual growth]
+3. [e.g. Living in overflow / abundance]
+4. [e.g. Program promotion]
+5. [e.g. Jennifer's personal wisdom / story]
+
+For each category:
+- 5 high-volume hashtags (1M+ posts)
+- 5 mid-volume hashtags (100K–1M posts)
+- 5 niche/community hashtags (under 100K)
+- 2 branded hashtags to own
+
+Flag any hashtags that are overused, shadowbanned, or misaligned.`},
+      {num:'06',title:'Story Sequence',use:'Planning a multi-frame Story sequence to promote an event, offer, or piece of content.',body:`I'm the TWA social media manager. Please build a Story sequence for:
+
+Platform: [Instagram / Facebook]
+Goal: [Promote [offer] / Drive to link / Build anticipation / Share a teaching]
+Number of frames: [5 / 7 / 10]
+CTA at the end: [Swipe up / DM us / Link in bio / Poll / Question box]
+Tone: [Exciting / Intimate / Inviting / Educational]
+
+For each frame:
+- What's on screen (image, graphic, video, or selfie)
+- Text overlay (short — under 10 words)
+- Any sticker or interactive element
+- Voiceover or caption if Jennifer is speaking to camera`},
+      {num:'07',title:'Competitive Content Analysis',use:'Researching what other voices in the conscious leadership space are posting — to find gaps and opportunities.',body:`I'm the TWA social media manager. Please analyze the content landscape in our space.
+
+Accounts or names to include (if known): [List 3–5 — or let Claude identify them]
+Platforms to review: [Instagram / YouTube / Podcast / All]
+What I want to understand:
+1. What content formats are performing best for these accounts?
+2. What topics are they covering that we're not?
+3. What topics are they NOT covering that TWA could own?
+4. How does their voice compare to Jennifer's?
+5. What's the audience response?
+
+Synthesize into a 1-page brief with 3 specific content opportunities for TWA.`},
+      {num:'08',title:'Email-to-Social Repurposing',use:'Jennifer or admin has written an email and you want to extract social content from it.',body:`I'm the TWA social media manager. Please repurpose this email into social content.
+
+Platform targets: [Instagram / Facebook / LinkedIn]
+
+From this email, extract and create:
+1. 3 Instagram caption options (different angles, same source)
+2. 2 Reel hook ideas
+3. 1 LinkedIn post (slightly more professional)
+4. 5 pull-quote graphics — the strongest standalone lines
+5. 1 Story sequence outline (5 frames)
+
+Preserve Jennifer's voice. Do not genericize her language.
+
+[PASTE EMAIL BELOW]`},
+      {num:'09',title:'Launch Countdown Content Series',use:'Counting down to any offer opening, event, or enrollment window with a cohesive content arc.',body:`I'm the TWA social media manager. Please build a launch countdown content series.
+
+Offer or event: [Name]
+Launch / open date: [Date]
+Countdown window: [X days before launch]
+Platforms: [Instagram / Facebook / Both]
+Posting frequency: [Daily / Every other day]
+
+Build a day-by-day content plan that:
+- Builds anticipation without revealing everything at once
+- Addresses the avatar's top 3 objections along the way
+- Includes at least 2 story/testimonial moments
+- Escalates energy naturally toward open/launch day
+- Ends with a strong open-day post + first 24-hour urgency post
+
+For each day: post type, caption angle, and key emotional beat.`},
+      {num:'10',title:'Monthly Performance Review Prep',use:'Preparing for a monthly content review — translating analytics into strategic insight.',body:`I'm the TWA social media manager. Please help me prepare our monthly social media review.
+
+Month: [Month / Year]
+Platforms reviewed: [Instagram / Facebook / YouTube / LinkedIn]
+Top performing posts: [List 3–5]
+Lowest performing posts: [List 2–3]
+Follower growth: [Number change]
+Reach / impressions trend: [Up / Down / Flat]
+Engagement rate trend: [Up / Down / Flat]
+Offers or events promoted this month: [List]
+
+Produce:
+1. 3 key insights from this month's performance
+2. What content to do more of — and why
+3. What content to stop or change — and why
+4. 3 strategic recommendations for next month
+5. One question to bring to Jennifer or Jeannie
+Format as a clean 1-page brief, not a data dump.`},
+    ]
+  },
+  {
+    id: 'jeannie', name: 'Jeannie — GM & Congruence Gate', icon: '🔑',
+    desc: 'Brand review, operational leadership, team communications, and strategic planning',
+    prompts: [
+      {num:'01',title:'Congruence Review of Any Draft',use:'Reviewing any Claude-generated output before moving it from Drafts to Approved. Your most-used prompt.',body:`I'm Jeannie, TWA's GM and congruence gate. Please review this draft for brand alignment.
+
+What this draft is: [Email / Caption / Landing page / Program outline / etc.]
+Who produced it: [Role]
+Intended use: [Where it's going — platform, audience, purpose]
+
+Please evaluate:
+1. Voice alignment — does this sound like Jennifer? Flag any lines that don't.
+2. Avatar accuracy — is this written for our ideal client or a generic audience?
+3. Language check — any forbidden words or phrases present?
+4. Signature language — are TWA's phrases used correctly and naturally?
+5. Transformation focus — does this point toward a new way of being or toward a product?
+6. Anything missing that would make this stronger?
+
+Give me a verdict (Approve / Approve with edits / Return for revision) and specific suggested changes.
+
+[PASTE DRAFT BELOW]`},
+      {num:'02',title:'Team Communication Draft',use:'You need to communicate a decision, change, or directive to the team — and want it to land with clarity and warmth.',body:`I'm Jeannie, TWA's GM. Please draft a team communication.
+
+Audience: [All team / Specific roles]
+Topic: [What I'm communicating]
+Decision or direction: [What has been decided]
+Action required from team: [What they need to do]
+Tone: [Informational / Excited / Sensitive / Redirecting / Appreciative]
+
+Keep it warm, clear, and completely jargon-free.
+TWA team members are conscious, capable humans — speak to them that way.`},
+      {num:'03',title:'Operational SOP Development',use:'Formalizing how a repeating operational process works — for consistency across a distributed team.',body:`I'm Jeannie, TWA's GM. Please help me document this operational process as a formal SOP.
+
+Process name: [Name]
+Why this SOP is needed: [What breaks down without it]
+Who is responsible: [Role(s)]
+Frequency: [How often this runs]
+Current state: [Describe — rough is fine]
+Ideal state: [Describe if different]
+Tools involved: [List]
+
+Produce a clean SOP with:
+- Purpose statement
+- Scope
+- Step-by-step procedure
+- Decision points and who owns them
+- What "done correctly" looks like
+- What to do if something goes wrong`},
+      {num:'04',title:'Offer Copy Congruence Audit',use:'A new offer is being developed and you want to make sure the copy aligns with the existing ecosystem.',body:`I'm Jeannie, TWA's GM. Please audit this offer copy for ecosystem congruence.
+
+New offer: [Name]
+Copy to review: [Paste landing page / email / description]
+
+Check and flag:
+1. Any claims that overlap too closely with an existing offer
+2. Any promises that are too large, vague, or undeliverable
+3. Positioning that might confuse our avatar about where this fits
+4. Pricing or access language that contradicts other offers
+5. Any copy that sounds like a competitor rather than TWA
+6. Missing elements that would make this stronger
+
+Give me a prioritized list of edits and a revised version of the most problematic sections.`},
+      {num:'05',title:'1:1 Feedback Conversation Prep',use:'Preparing for a performance conversation, check-in, or redirection conversation with any team member.',body:`I'm Jeannie, TWA's GM. Please help me prepare for a feedback conversation.
+
+Team member role: [Role — not name]
+Nature of conversation: [Performance review / Concern / Appreciation / Redirection]
+What's working well: [2–3 specific things]
+What needs to shift: [1–3 specific things]
+Outcome I want: [Decision / Understanding / Commitment / Just to be heard]
+Relationship dynamic: [Close / More distant / Tense / New]
+
+Produce:
+1. Conversation opener (warm, non-defensive framing)
+2. Key points to make — in order of priority
+3. Questions to ask to invite their perspective
+4. How to close with clarity and care
+5. Any landmines to avoid`},
+      {num:'06',title:'Strategic Planning Facilitation Guide',use:'Preparing to lead a strategic planning session with Jennifer — quarterly, annual, or around a specific decision.',body:`I'm Jeannie, TWA's GM. Please build a facilitation guide for a strategic planning session with Jennifer.
+
+Session type: [Quarterly review / Annual plan / Specific decision]
+Duration: [Hours]
+Key questions Jennifer needs to explore: [List 3–5]
+Decisions that need to come out of this session: [List]
+Jennifer's current energy and bandwidth: [High / Stretched / Recovering]
+
+Produce:
+- Session agenda with timing
+- Facilitation questions for each section
+- Decision-making frameworks for binary choices
+- How to close with clear next steps
+- What Jeannie needs to prepare in advance`},
+      {num:'07',title:'Vendor or Contractor Brief',use:'Briefing a new freelancer, contractor, or vendor on a specific project for TWA.',body:`I'm Jeannie, TWA's GM. Please draft a project brief for a [role] contractor.
+
+Project: [Describe what we need them to produce]
+Timeline: [Deadline and key milestones]
+Budget: [Amount or "TBD"]
+Access they'll need: [Google Drive / Brand assets / Recordings / etc.]
+Who they'll report to: [Jeannie / Admin / Program Manager]
+Brand context to share: [Key things they must understand about TWA]
+Output format required: [File type / Delivery method]
+
+Include a section on what "TWA brand alignment" means for a contractor.`},
+      {num:'08',title:'Sensitive Situation Communication',use:'A client complaint, team conflict, or public comment needs a response that protects the brand and honors everyone.',body:`I'm Jeannie, TWA's GM. Please help me draft a response to a sensitive situation.
+
+Situation type: [Client complaint / Team conflict / Public comment / Refund request / etc.]
+What happened: [Describe the situation — be specific]
+The other party's perspective: [As best I understand it]
+TWA's position: [What we're willing to do / not do]
+Desired outcome: [Resolution / De-escalation / Clear boundary / Apology]
+Tone needed: [Empathetic and firm / Apologetic / Clarifying / Warm redirect]
+
+Produce:
+1. Draft response
+2. What to leave out
+3. Suggested next step if this doesn't resolve it`},
+      {num:'09',title:'Weekly Ops Debrief Summary',use:'Closing out the week and capturing what happened operationally — for your own records and Jennifer\'s awareness.',body:`I'm Jeannie, TWA's GM. Please help me draft the weekly ops debrief.
+
+Week of: [Dates]
+
+Completed this week (rough notes):
+[Paste your notes]
+
+In progress / carry-forward:
+[List]
+
+Blockers or open questions for Jennifer:
+[List]
+
+Team pulse notes:
+[Any observations about team energy, capacity, or dynamic]
+
+Wins worth celebrating:
+[List 1–3]
+
+Format as a clean, readable debrief — no more than 1 page.
+Jennifer reads this in under 3 minutes.`},
+      {num:'10',title:'Content Calendar Final Review',use:'The social media manager has submitted a content calendar and you\'re reviewing it before approving for the month.',body:`I'm Jeannie, TWA's GM. Please help me review this content calendar before I approve it.
+
+Calendar for: [Platform / Month]
+Offer or campaign focus: [What's being promoted this month]
+
+Review for:
+1. Voice consistency — does every post sound like Jennifer?
+2. Avatar relevance — speaking to our ideal client's real experience?
+3. Offer sequencing — does the promotional arc make sense?
+4. Balance — appropriate mix of value, community, and promotion?
+5. Any posts that feel too generic, too salesy, or off-brand?
+6. Missing moments — any key dates or themes we should have covered?
+
+Give me: overall verdict, 3–5 specific edits, and any posts I should flag for Jennifer's review.
+
+[PASTE CONTENT CALENDAR BELOW]`},
+    ]
+  },
+  {
+    id: 'jennifer', name: 'Jennifer — Founder & Leadership', icon: '✨',
+    desc: 'Strategic thinking, book writing, talk development, activations, and IP codification',
+    prompts: [
+      {num:'01',title:'Translate Raw Idea into Content',use:'Jennifer has a thought or insight she wants to develop — but it\'s still rough.',body:`I'm Jennifer. I have a raw idea I want to develop into content. Please help me shape it.
+
+The idea (as raw as it is):
+[Paste the voice note transcript, rough paragraph, or stream of consciousness]
+
+Intended format: [Email / Instagram post / Blog post / Webinar teaching / Book section]
+Who I'm speaking to: [Broad audience / Agents of Awakening members / Leaders / etc.]
+
+Please:
+1. Identify the core teaching or insight buried in my raw idea
+2. Suggest the strongest angle to lead with
+3. Write a first draft in my voice
+4. Flag any places where I'll want to add a personal story or specific example
+Keep my language and rhythm intact. Don't genericize it.`},
+      {num:'02',title:'Book Chapter Development',use:'Working on manuscript content — starting a new chapter, developing an existing one, or getting unstuck.',body:`I'm Jennifer. I'm working on [book title / working title].
+
+Chapter topic: [What this chapter covers]
+Where it fits in the book arc: [Early / Middle / Near end / Standalone]
+Core teaching of this chapter: [The one thing the reader must understand]
+Personal story I may use here: [Describe briefly — or "TBD"]
+Tone for this chapter: [More personal / More teaching / More activating / Mixed]
+
+Current state of the chapter:
+[Paste what exists — or describe from scratch]
+
+Please:
+1. Suggest a chapter structure
+2. Draft the opening 3 paragraphs in my voice
+3. Identify 2–3 places where a story, metaphor, or exercise should go
+4. Write one closing paragraph that leaves the reader activated`},
+      {num:'03',title:'Thought Partner for Strategic Decision',use:'Jennifer is weighing a significant decision and wants a thinking partner before deciding.',body:`I'm Jennifer. I'm trying to think through a decision and I want a thought partner.
+
+The decision: [Describe what I'm considering]
+What I know I want: [My instinct or inclination]
+What's giving me pause: [The hesitation or complexity]
+Who else is affected: [Team / Clients / Partners]
+Timeline: [When this needs to be decided]
+What "right" feels like to me: [Even if vague — describe the felt sense]
+
+Please:
+1. Reflect back what you hear me actually wrestling with
+2. Offer the strongest case FOR the decision
+3. Offer the strongest case AGAINST it
+4. Suggest 1–2 questions I haven't asked myself yet
+5. Give me your honest read on what seems most aligned with TWA's mission
+Don't just validate me. Tell me what you actually think.`},
+      {num:'04',title:'Signature Talk Development',use:'Jennifer is building or refreshing a keynote, signature talk, or speaking presentation.',body:`I'm Jennifer. I'm developing a [keynote / signature talk / TEDx-style talk].
+
+Talk title (working): [Title or concept]
+Audience: [Who I'm speaking to]
+Event or context: [Where this will be delivered]
+Duration: [Minutes]
+Core message (the one thing they must leave with): [Describe]
+My personal origin story moment I'll use: [Briefly describe]
+The transformation I want the audience to have during the talk: [Not after — DURING]
+
+Produce:
+1. Talk structure (opening → teaching → story → activation → close)
+2. Opening hook (first 60 seconds)
+3. 3 key teaching points with suggested transitions
+4. A moment of direct audience activation
+5. Closing that leaves them in a state — not just thinking new thoughts`},
+      {num:'05',title:'Email to My List',use:'Jennifer wants to write directly to her email list — sharing a teaching, making an offer, or simply connecting.',body:`I'm Jennifer. I want to write an email to my list.
+
+Purpose: [Teaching / Offer / Story / Connection / Announcement]
+What I want them to feel when they finish reading: [Describe the felt experience]
+Core message or teaching: [The insight or invitation]
+Offer or CTA (if any): [What I want them to do]
+Personal moment I want to include: [A story, a recent experience, something real]
+Tone: [Warm and intimate / Expansive and visionary / Playful / Direct and activating]
+
+Please write this in my voice — not a cleaned-up version of me. The ellipses, the questions, the breath. Keep it real.
+Subject line: Give me 5 options.
+Preview text: 1 option for each subject line.
+Email body: Full draft.`},
+      {num:'06',title:'Program or Offer Naming',use:'A new program, event, or offer needs a name that carries TWA\'s energy.',body:`I'm Jennifer. I need naming help for a new [program / event / offer / book / series].
+
+What this is: [Describe in 2–4 sentences]
+The transformation it produces: [What the client becomes, feels, or accesses]
+The avatar it's for: [Which segment of our ideal client]
+Tone I want the name to carry: [Expansive / Activating / Intimate / Bold / Poetic]
+Names I've already considered: [List if any — and why you're not sold]
+Names I love from our existing ecosystem: [Agents of Awakening / Get Out of Your Own Way™ / etc.]
+
+Give me:
+- 10 name options
+- For each: why it works and what energy it carries
+- Your top 3 and why
+- 1 wild card — something unexpected`},
+      {num:'07',title:'Activation Script',use:'Jennifer is designing a live or recorded activation — an experiential moment intended to shift the participant\'s state directly.',body:`I'm Jennifer. I want to create an activation for [event / program / recording].
+
+What state I want participants in at the START: [Describe their likely current state]
+What state I want them in at the END: [The shift — what they'll feel, access, or embody]
+Duration: [Minutes]
+Format: [Live on Zoom / In-person / Recorded audio / Embedded in a webinar]
+Any specific Superpower or framework this activation works with: [Describe]
+Tone: [Gentle and opening / Powerful and direct / Playful / Sacred and still]
+
+Produce:
+1. The full activation script — in my voice, as I would speak it
+2. Pacing notes (where to slow down, where to pause)
+3. Opening framing (how to set the container)
+4. Closing integration (how to bring them gently back and anchor the shift)
+This is not a meditation. It's an activation. There's a difference.`},
+      {num:'08',title:'Podcast or Interview Prep',use:'Jennifer is about to be interviewed on a podcast or media appearance and wants to be fully prepared.',body:`I'm Jennifer. I have an upcoming [podcast interview / media appearance / live conversation].
+
+Host or show: [Name]
+Their audience: [Who listens to this show]
+Estimated topics: [List if known — or "unknown"]
+What I most want to share: [My agenda — the message I want out in the world]
+Offers I can mention: [List — or "none / organic only"]
+What I want to avoid: [Topics, framings, or questions I don't want to go deep on]
+
+Produce:
+1. My 60-second opening if they ask "tell us about yourself" (in my voice — not a bio)
+2. My core talking points (3–5) with supporting language
+3. 3 stories I can pull from for any question
+4. 3 unexpected questions I could ask the host
+5. My close — what I want to leave the audience with`},
+      {num:'09',title:'Personal Vision or Direction Document',use:'Jennifer wants to articulate her vision or intention — for herself, for Jeannie, or as a foundation for a new phase.',body:`I'm Jennifer. I want to articulate something I've been sensing or feeling about [the business / my work / the next phase].
+
+Raw sense of it:
+[Paste the stream of consciousness, voice note transcript, or rough thoughts]
+
+What I want this document to become:
+[A personal vision statement / A letter to myself / A strategic direction doc / A manifesto]
+
+Intended reader:
+[Just me / Jeannie / The team / Everyone]
+
+Please:
+1. Listen for what I'm actually saying beneath the words
+2. Reflect it back in a form that feels more complete than what I gave you
+3. Use my language and rhythm
+4. Don't make it bigger than it is — or smaller
+5. End it in a way that activates me to act`},
+      {num:'10',title:'IP Documentation & Protection',use:'Jennifer wants to codify or document a framework, methodology, or piece of intellectual property she\'s developed.',body:`I'm Jennifer. I want to document a piece of my intellectual property.
+
+Framework or concept name: [Name — or working name]
+What it is: [Describe in my own words — as raw as needed]
+How I came to develop it: [Origin story]
+How it works (the mechanism): [How does it produce the result?]
+What makes it different from anything else: [The unique element]
+Who it's for: [The ideal person this serves]
+How I currently teach or deliver it: [Live / Recorded / In programs]
+
+Produce:
+1. A clean 1-page description of the framework (suitable for a website or book)
+2. A teaching outline — how to explain it in a talk
+3. A simple diagram description
+4. Suggested trademark-worthy elements
+5. 3 ways this IP could be packaged as a standalone offer
+This is Jennifer's work — preserve her language exactly. Do not genericize.`},
+    ]
+  },
+  {
+    id: 'content', name: 'Content Creation & Repurposing', icon: '♻️',
+    desc: 'Cross-functional content strategy — from one recording to a full asset suite',
+    prompts: [
+      {num:'01',title:'One Recording → Full Asset Suite',use:'You have any TWA recording and want to extract maximum value from a single piece of source material.',body:`I am on the TWA team. I have a recording from [event name / type / date].
+Please build a complete content asset suite from this source material.
+
+Recording summary or transcript:
+[Paste transcript or describe the content in detail]
+
+Produce:
+1. Blog post (800–1000 words, SEO-ready, Jennifer's voice)
+2. Email to the list (subject line + full email body)
+3. 5 Instagram captions (variety of angles)
+4. 3 Reel hook concepts (opening line + 2-sentence concept)
+5. 10 pull-quotes formatted for graphic overlays
+6. 1 lead magnet concept inspired by the core teaching
+7. YouTube description
+8. 3 Pinterest pin descriptions
+
+For each asset: write it in Jennifer's voice, ready for Jeannie's review.
+Flag any that need a personal story or image from Jennifer.`},
+      {num:'02',title:'Blog Post from Raw Content',use:'Turning a transcript, email, teaching, or rough notes into a full blog post.',body:`I am on the TWA team. Please write a blog post from this source material.
+
+Source type: [Transcript / Email / Raw notes / Jennifer's spoken idea]
+Intended topic/title: [Title or concept]
+Target keyword: [SEO term if known]
+Length: [600 / 800 / 1000 / 1200+ words]
+CTA at the end: [Join Agents of Awakening / Apply for Advanced Guidance / etc.]
+
+The post should:
+- Open with a hook that speaks directly to the avatar's current experience
+- Teach something real and usable — not vague inspiration
+- Sound exactly like Jennifer
+- End with an invitation, not a hard sell
+
+[PASTE SOURCE MATERIAL BELOW]`},
+      {num:'03',title:'Email Sequence from a Core Teaching',use:'Building a multi-email nurture sequence around one of Jennifer\'s key frameworks.',body:`I am on the TWA team. Please build an email sequence from this teaching.
+
+Core teaching or framework: [Name or description]
+Source material: [Paste transcript, blog post, or rough notes]
+Sequence length: [3 / 5 / 7 emails]
+Sequence goal: [Nurture / Launch / Re-engagement / Onboarding / Post-event]
+Offer to introduce (if any): [Name — or "none, pure value"]
+Tone across the sequence: [Building intimacy / Building urgency / Teaching deeply / Mixing both]
+
+For each email:
+- Subject line (3 options)
+- Preview text
+- Body (full draft in Jennifer's voice)
+- CTA
+Each email should stand alone AND work as part of a sequence.`},
+      {num:'04',title:'Lead Magnet Development',use:'Creating a new opt-in offer — a PDF, guide, quiz, checklist, or mini-training — to grow the list.',body:`I am on the TWA team. Please help develop a lead magnet for TWA.
+
+Topic area: [What problem or desire this addresses for the avatar]
+Format: [PDF guide / Checklist / Quiz / Mini video series / Audio activation / Workbook]
+Length target: [Pages / Minutes / Number of questions]
+Where it fits in the funnel: [Entry point to Agents of Awakening / Specific program / General list growth]
+Jennifer's teaching this draws from: [Framework or concept]
+
+Produce:
+1. 3 title/name options for the lead magnet
+2. Outline or structure
+3. Full draft of the content
+4. Opt-in page headline and subheadline (3 options each)
+5. Thank-you page copy
+6. First follow-up email (sent immediately after opt-in)`},
+      {num:'05',title:'Landing Page Copy Framework',use:'Writing sales copy for any TWA offer — program, event, membership tier, or retreat.',body:`I am on the TWA team. Please write landing page copy for:
+
+Offer name: [Name]
+Price point: [Amount — or "not shown on page"]
+Primary audience: [Which avatar segment]
+Transformation promise: [What they will embody, feel, or access]
+What's included: [List the main components]
+Testimonials available: [Yes — describe / No — flag placeholder]
+Primary CTA: [Apply / Enroll / Join / Book a call]
+
+Page structure:
+1. Hero headline + subheadline (3 options each)
+2. Problem / resonance section
+3. Possibility section
+4. Jennifer's authority and origin story
+5. What's included (features → benefits)
+6. Who this is for / who it is NOT for
+7. Testimonials (placeholder prompts if none yet)
+8. FAQ (5 questions + answers)
+9. Final CTA section
+Write everything in Jennifer's voice. No hard-sell. No false urgency.`},
+      {num:'06',title:'Social Proof & Testimonial Mining',use:'You have client feedback or testimonials and want to extract and format the most usable social proof.',body:`I am on the TWA team. Please help me mine and format social proof from these testimonials.
+
+Source: [Paste raw testimonials, emails, comments, or survey responses]
+Intended use: [Landing page / Social captions / Email / All]
+
+For each testimonial:
+1. The most powerful 1–3 sentence pull-quote (exactly as written — do not paraphrase)
+2. The transformation being described (before → after)
+3. Which TWA offer this relates to
+4. Best use case
+5. Any follow-up questions worth asking this client
+
+Also: identify themes that appear across multiple testimonials — these are the transformation promises the market is validating.`},
+      {num:'07',title:'Content Pillar Development',use:'Building or refreshing the strategic content pillars that guide all of TWA\'s content creation.',body:`I am on the TWA team. Please help us develop or refine TWA's content pillars.
+
+Our mission: Causing Global Awakening by assisting leaders to embody their Superpowers.
+Our avatar: Conscious leaders in transition — experienced, accomplished, ready for a quantum leap.
+Our core philosophy: Scientuality — bridging science and spirituality.
+Current main offers: [List 3–4 active offers]
+
+Suggest:
+1. 5–6 core content pillars
+2. For each pillar:
+   - Name and 1-sentence description
+   - 3 specific content angles
+   - 1 example post concept per angle
+   - How this pillar connects to a specific offer
+3. How to balance the pillars across a monthly calendar
+4. Any pillar that's currently missing`},
+      {num:'08',title:'Repurpose Old Content for Fresh Relevance',use:'Reviving a past blog post, email, or piece of content and making it current without starting from scratch.',body:`I am on the TWA team. Please refresh this older piece of content for current use.
+
+Original content type: [Blog post / Email / Social caption / Webinar section]
+Original date: [Approximate]
+Where it will be used now: [Same platform / Different platform / Different audience]
+What's changed since this was written: [New offers / New language / New context / Nothing major]
+What to preserve: [Jennifer's core teaching / Specific language / The story]
+What to update: [Offer references / CTAs / Language / Length]
+
+[PASTE ORIGINAL CONTENT BELOW]
+
+Produce a fully refreshed version — same soul, current voice, updated references.
+Do not gut the original — evolve it.`},
+      {num:'09',title:'Content to Sales Bridge',use:'Transitioning from value content to an offer — in a webinar, email, or social post — without it feeling like a hard pivot.',body:`I am on the TWA team. Please write the bridge section from teaching to offer for:
+
+Context: [Webinar / Email / Social caption / Live event]
+Teaching that just happened: [Summarize the value content]
+Offer being introduced: [Name and 1-sentence description]
+Price point: [Amount — or "not revealed here"]
+Primary CTA: [Apply / Enroll / Join / Book a call / Link in bio]
+Tone: [Natural and inviting / Excited / Soft / Direct]
+
+The bridge should:
+- Feel like a natural continuation of the teaching
+- Make the offer feel like the obvious next step
+- Not apologize for the offer or over-explain the price
+- Sound exactly like Jennifer
+- Be 150–300 words
+
+Write 2 versions: one warmer, one more direct.`},
+      {num:'10',title:'Content Performance → Next Quarter Strategy',use:'Using past performance data and team insights to shape the next quarter\'s content approach.',body:`I am on the TWA team. Please help us build our content strategy for [next quarter].
+
+Last quarter's highlights (what worked): [List]
+Last quarter's misses (what didn't land): [List]
+Upcoming in [next quarter]: [List known launches, events, or focus areas]
+Avatar intel we've gathered recently: [Any new insight]
+Business priority for this quarter: [Revenue goal / Membership growth / Program launch / Brand awareness]
+
+Produce:
+1. 3 strategic content themes for the quarter
+2. Priority content types by platform
+3. One big content moment or campaign to anchor the quarter
+4. What to stop doing based on last quarter's data
+5. A simple weekly content rhythm we can actually execute
+Keep it executable — not aspirational. Our team is lean and globally distributed.`},
+    ]
+  },
+  {
+    id: 'agents', name: 'Agents, MCPs & Scheduled Tasks', icon: '🤖',
+    desc: 'Automation layer — the always-on intelligence that runs without a human prompt',
+    prompts: [
+      {num:'01',title:'Weekly Avatar Intelligence Digest',use:'Runs weekly to surface what TWA\'s ideal client is currently talking about, struggling with, and searching for.',body:`Research what conscious leaders, spiritual entrepreneurs, and transformation-seeking women 
+are currently discussing across Instagram, YouTube comments, Reddit (r/spirituality, 
+r/entrepreneur), and podcast communities. Focus on the last 7 days.
+
+Report:
+1. Top 3 pain points being expressed this week
+2. Any trending topics, phrases, or questions relevant to TWA's work
+3. Any conversations where TWA's methodology would be a perfect answer
+4. One content idea TWA could publish this week to be directly relevant
+
+Keep it to one page. Flag anything urgent.
+
+DELIVERY: Jeannie's email or Slack every Monday 7am ET
+IMPLEMENTATION: Manual weekly → Zapier + Claude API → Claude Code agent`},
+      {num:'02',title:'New Offer / Competitor Alert',use:'Monitors the transformational coaching space for new program launches or positioning shifts adjacent to TWA.',body:`Search for any new program launches, events, or major content pushes in the last 7 days 
+from voices in the conscious leadership, spiritual entrepreneurship, and transformational 
+coaching space.
+
+Report:
+1. Any new offers launched — name, price, positioning, target audience
+2. Any major content or campaign that's gaining traction
+3. Any language or positioning that overlaps with TWA's messaging
+4. Any gap in the market this reveals that TWA is uniquely positioned to fill
+
+Flag anything Jennifer or Jeannie should be aware of before our next program launch.
+
+DELIVERY: Jeannie + Program Manager, every Friday
+IMPLEMENTATION: Manual weekly research → Scheduled via Claude API`},
+      {num:'03',title:'Draft Review Queue Checker',use:'Checks the Drafts folders in Google Drive and compiles a summary of what\'s pending Jeannie\'s review.',body:`AUTOMATED MESSAGE TEMPLATE:
+
+📋 TWA Draft Review Queue — [Date]
+
+Pending your review:
+• [File name] — [Role] — Added [Date]
+• [File name] — [Role] — Added [Date]
+
+Oldest unreviewed: [File name] — [X days ago]
+Total awaiting review: [X]
+
+Open _AI Outputs → Drafts in Drive
+
+DELIVERY: Jeannie via Slack, Tuesday and Friday mornings
+IMPLEMENTATION: Google Drive API + Slack webhook via Zapier or Make.com
+MCP USED: Google Drive MCP + Slack MCP`},
+      {num:'04',title:'Monthly Offer Library Audit',use:'Compares the Offer Library document against the TWA website and flags any discrepancies.',body:`Compare the contents of the TWA Offer Library document against the current 
+offers shown on thewideawakening.com.
+
+Flag:
+1. Any offers on the website not in the Offer Library
+2. Any offers in the Offer Library not on the website
+3. Any pricing discrepancies between the two
+4. Any descriptions that have drifted significantly from website copy
+5. Any offers that appear retired or inactive
+
+Produce a brief update checklist for Jeannie to action.
+
+DELIVERY: Jeannie + Admin, first Monday of each month
+IMPLEMENTATION: Claude API with web search + Google Drive read access`},
+      {num:'05',title:'MCP Integration Guide — 5 Priority Connections',use:'The 5 MCP integrations that deliver the most immediate value for TWA\'s distributed team.',body:`PRIORITY MCP INTEGRATIONS FOR TWA:
+
+1. GOOGLE DRIVE MCP
+   Use cases: Read/search/summarize files directly from _AI Operations and _AI Outputs
+   Example: "Summarize everything in the Drafts folder from the last 7 days"
+   Setup: Connect Google Drive to Claude → grant folder-level access
+
+2. GMAIL MCP
+   Use cases: Draft replies, summarize threads, flag unanswered emails
+   Example: "Draft a reply to this media inquiry in Jennifer's voice"
+   Setup: Connect Gmail account → use in sessions for email management
+
+3. GOOGLE CALENDAR MCP
+   Use cases: Read team calendar, find scheduling conflicts, draft meeting invites
+   Example: "What's on Jennifer's calendar next week? Any conflicts with the launch?"
+   Setup: Connect calendar → use in planning sessions
+
+4. SLACK MCP
+   Use cases: Send notifications, read channel summaries, trigger alerts
+   Example: Auto-notify Jeannie when a new draft appears in Drive
+   Setup: Connect Slack workspace → configure approved channels
+
+5. ATLASSIAN MCP (Trello)
+   Use cases: Create cards, update task status, generate project status reports
+   Example: "Create a Trello card for the Flight School launch with all tasks from this outline"
+   Setup: Connect Atlassian account → grant Trello board access
+
+IMPLEMENTATION ORDER: Drive → Slack → Calendar → Gmail → Trello
+TOTAL ESTIMATED SETUP TIME: 2–4 weeks for all 5`},
+      {num:'06',title:'Quarterly Business Intelligence Digest',use:'Full-picture quarterly report for Jennifer and Jeannie — performance, market, and strategic recommendations.',body:`Produce a quarterly business intelligence digest for The Wide Awakening.
+
+Sections to cover:
+1. CONTENT PERFORMANCE — What content themes and formats performed best this quarter across all platforms?
+
+2. OFFER ECOSYSTEM HEALTH — Which offers are gaining traction? Which need attention or retirement?
+
+3. AVATAR LANGUAGE SHIFTS — How has the language, concerns, and desires of our ideal client shifted this quarter?
+
+4. COMPETITIVE LANDSCAPE — Any notable moves by adjacent voices in our space?
+
+5. STRATEGIC RECOMMENDATIONS — 3 specific recommendations for the next quarter based on all of the above.
+
+DELIVERY: Jennifer + Jeannie, first week of each new quarter
+IMPLEMENTATION: Scheduled via Claude API with web search + Google Drive integration
+FORMAT: Executive summary (1 page) + appendix (details on request)`},
+      {num:'07',title:'Content Calendar Gap Alert',use:'Reviews the approved content calendar and flags any upcoming week that is under the target number of posts.',body:`AUTOMATED MESSAGE TEMPLATE:
+
+📅 TWA Content Calendar Check — Week of [Date]
+
+This week: [X] posts scheduled ✅
+Next week: [X] posts scheduled ⚠️ [under target of X]
+Week after: [X] posts scheduled ✅
+
+Posts needing approval in Drafts: [X]
+Action needed from: [Social Media Manager / Jeannie]
+
+DELIVERY: Social Media Manager + Jeannie, every Wednesday
+IMPLEMENTATION: Google Drive read + Slack webhook via Zapier or Make.com`},
+      {num:'08',title:'Launch Countdown Briefings',use:'Automated status checks sent to the team at 30, 14, 7, 3, and 1 day before any registered launch.',body:`AUTOMATED LAUNCH COUNTDOWN — [X] DAYS UNTIL [LAUNCH NAME]
+
+Content readiness:
+☐ Email sequence written and in Approved folder
+☐ Social posts written and in Approved folder
+☐ Landing page copy approved by Jeannie
+☐ Webinar/event outline finalized
+
+Team tasks outstanding: [Auto-pulled from Trello]
+Jeannie's sign-off received: [Yes / No]
+Jennifer briefed: [Yes / Pending]
+
+Next checkpoint: [Date and type]
+
+DELIVERY: Slack #launches channel
+CADENCE: 30 days, 14 days, 7 days, 3 days, 1 day before launch
+IMPLEMENTATION: Google Calendar trigger + Claude API + Slack MCP`},
+      {num:'09',title:'Archive Trigger Notification',use:'Monthly reminder to move Approved files older than 90 days to _AI Archive — keeping the system clean.',body:`AUTOMATED ARCHIVE REMINDER:
+
+📦 Monthly Archive Trigger — [Date]
+
+Files in Approved folders older than 90 days:
+
+01 - Administration/Approved: [X files]
+02 - Social Media/Approved: [X files]
+03 - Video & Content/Approved: [X files]
+04 - Program Development/Approved: [X files]
+[...continues for all 9 folders]
+
+Action: Move listed files to _AI Archive maintaining same folder structure.
+Responsible: Admin
+
+DELIVERY: Slack notification to Admin
+CADENCE: First of each month
+IMPLEMENTATION: Google Drive API + Slack webhook`},
+      {num:'10',title:'Implementation Roadmap (Phase Plan)',use:'The full 3-phase roadmap for building out the TWA automation layer — from quick wins to full agent deployment.',body:`TWA AI AUTOMATION IMPLEMENTATION ROADMAP
+
+PHASE 1 — IMMEDIATE (1–2 weeks, low complexity)
+• Agent 01: Weekly Avatar Intelligence Digest (manual → scheduled)
+• Agent 03: Draft Review Queue Checker (Zapier + Drive + Slack)
+• Agent 05: Content Calendar Gap Alert (Zapier + Drive + Slack)
+Start here. These deliver immediate value with minimal setup.
+
+PHASE 2 — MCP LAYER (2–4 weeks, medium complexity)
+• Google Drive MCP — read/search/summarize Drive files in Claude
+• Slack MCP — send notifications and read channel summaries
+• Google Calendar MCP — read calendar, find conflicts
+• Gmail MCP — draft replies, summarize threads
+• Atlassian/Trello MCP — create cards, read board status
+
+PHASE 3 — SCHEDULED TASKS (4–8 weeks, advanced)
+• Fully automated weekly/monthly reports via Claude API
+• Launch countdown briefings triggered by calendar events
+• Quarterly business intelligence digest
+• Auto-archive trigger
+
+TOOLS REQUIRED:
+• Claude Pro — $20/person/month (all team)
+• Claude API — usage-based (automation layer)
+• Zapier or Make.com — $20–50/month (connections)
+• Google Workspace — existing
+• Slack — existing
+
+RECOMMENDED STARTING POINT: Agent 01 + Agent 03`},
+    ]
+  },
+];
+
+let ppFilter = 'all';
+
+function ppSetFilter(filter, btn) {
+  ppFilter = filter;
+  document.querySelectorAll('#twa-playbook .pp-filter-btn').forEach(b => {
+    b.className = 'pp-filter-btn';
+  });
+  const classMap = {all:'fa',admin:'f-admin',progmgr:'f-progmgr',video:'f-video',social:'f-social',jeannie:'f-jeannie',jennifer:'f-jennifer',content:'f-content',agents:'f-agents'};
+  btn.className = 'pp-filter-btn ' + (classMap[filter] || '');
+  ppFilterAll();
+}
+
+function ppFilterAll() {
+  const q = document.getElementById('pp-search').value.toLowerCase().trim();
+  let visible = 0;
+  document.querySelectorAll('#twa-playbook .pp-role-section').forEach(section => {
+    const roleId = section.dataset.role;
+    const showRole = ppFilter === 'all' || ppFilter === roleId;
+    let rv = 0;
+    section.querySelectorAll('.pp-card').forEach(card => {
+      const match = !q || card.dataset.title.toLowerCase().includes(q) || card.dataset.body.toLowerCase().includes(q) || card.dataset.use.toLowerCase().includes(q);
+      const show = showRole && match;
+      card.classList.toggle('hidden', !show);
+      if (show) { rv++; visible++; }
+    });
+    section.style.display = rv > 0 ? '' : 'none';
+    section.querySelector('.pp-role-count').textContent = rv === 10 ? '10 prompts' : rv + ' / 10';
+  });
+  document.getElementById('pp-result-count').textContent = visible + ' prompt' + (visible !== 1 ? 's' : '');
+  document.getElementById('pp-empty').classList.toggle('visible', visible === 0);
+}
+
+function ppToggleCard(card) {
+  card.classList.toggle('expanded');
+  card.querySelector('.pp-expand-btn').textContent = card.classList.contains('expanded') ? '▲ Collapse' : '▼ Show prompt';
+}
+
+function ppCopyPrompt(e, body) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(body).then(() => {
+    const btn = e.target;
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+// Build DOM
+const ppMain = document.getElementById('pp-main');
+
+ROLES.forEach(role => {
+  const section = document.createElement('div');
+  section.className = 'pp-role-section rs-' + role.id;
+  section.dataset.role = role.id;
+  section.innerHTML = '<div class="pp-role-header"><div class="pp-role-icon">' + role.icon + '</div><div><div class="pp-role-name">' + role.name + '</div><div class="pp-role-desc">' + role.desc + '</div></div><div class="pp-role-count">10 prompts</div></div><div class="pp-prompt-grid"></div>';
+
+  const grid = section.querySelector('.pp-prompt-grid');
+
+  role.prompts.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'pp-card';
+    card.dataset.title = p.title;
+    card.dataset.body  = p.body;
+    card.dataset.use   = p.use;
+    card.innerHTML = '<div class="pp-card-head"><span class="pp-num">' + p.num + '</span><div class="pp-card-title">' + p.title + '</div></div><div class="pp-card-use">' + p.use + '</div><pre class="pp-card-body">' + p.body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</pre><div class="pp-card-foot"><button class="pp-expand-btn">▼ Show prompt</button><button class="pp-copy-btn">Copy</button></div>';
+    card.querySelector('.pp-expand-btn').addEventListener('click', e => { e.stopPropagation(); ppToggleCard(card); });
+    card.querySelector('.pp-copy-btn').addEventListener('click', e => ppCopyPrompt(e, p.body));
+    card.addEventListener('click', () => ppToggleCard(card));
+    grid.appendChild(card);
+  });
+
+  ppMain.appendChild(section);
+});
+
+ppFilterAll();
+</script>
+</body>
+</html>

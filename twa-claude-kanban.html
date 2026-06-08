@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWA Rollout — Adam's Kanban Board</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+#twa-kanban {
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #13120F;
+  color: #E8E6DF;
+  -webkit-font-smoothing: antialiased;
+  width: 100%;
+}
+
+#twa-kanban *, #twa-kanban *::before, #twa-kanban *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* TOPBAR */
+#twa-kanban .kb-topbar {
+  background: #1C1B17;
+  border-bottom: 1px solid #2E2D28;
+  padding: 0 16px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#twa-kanban .kb-topbar-left { display: flex; align-items: center; gap: 12px; }
+#twa-kanban .kb-logo {
+  width: 28px; height: 28px; background: #1D9E75; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #fff; flex-shrink: 0;
+}
+#twa-kanban .kb-board-title { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #E8E6DF; letter-spacing: 0.02em; }
+#twa-kanban .kb-board-sub   { font-size: 11px; color: #5A5955; font-family: 'IBM Plex Mono', monospace; }
+#twa-kanban .kb-topbar-right { display: flex; align-items: center; gap: 16px; }
+#twa-kanban .kb-progress-wrap { display: flex; align-items: center; gap: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #9C9A92; }
+#twa-kanban .kb-total-bar { width: 120px; height: 4px; background: #3A3935; border-radius: 2px; overflow: hidden; }
+#twa-kanban .kb-total-fill { height: 100%; background: #1D9E75; border-radius: 2px; width: 0%; transition: width 0.5s ease; }
+#twa-kanban .kb-total-pct { color: #5DCAA5; min-width: 32px; text-align: right; }
+#twa-kanban .kb-reset-btn {
+  background: transparent; border: 1px solid #3A3935; color: #5A5955;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 4px 10px; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+}
+#twa-kanban .kb-reset-btn:hover { border-color: #D85A30; color: #D85A30; }
+
+/* BOARD */
+#twa-kanban .kb-board {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding: 20px; align-items: start;
+}
+
+/* COLUMN */
+#twa-kanban .kb-col { width: 100%; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+#twa-kanban .kb-col-header { display: flex; align-items: center; justify-content: space-between; padding: 0 4px 8px; border-bottom: 2px solid #2E2D28; }
+#twa-kanban .kb-col-label { display: flex; align-items: center; gap: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+#twa-kanban .kb-col-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+#twa-kanban .kb-col-count { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5955; background: #2E2D28; padding: 1px 7px; border-radius: 10px; }
+#twa-kanban .kb-col-progress { height: 3px; background: #2E2D28; border-radius: 2px; overflow: hidden; margin-top: 2px; }
+#twa-kanban .kb-col-prog-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 0.4s ease; }
+
+/* Column accent colors */
+#twa-kanban .kc-p1 .kb-col-header { border-color: #0F6E56; }
+#twa-kanban .kc-p1 .kb-col-dot    { background: #1D9E75; }
+#twa-kanban .kc-p1 .kb-col-label  { color: #5DCAA5; }
+#twa-kanban .kc-p1 .kb-col-prog-fill { background: #1D9E75; }
+#twa-kanban .kc-p2 .kb-col-header { border-color: #534AB7; }
+#twa-kanban .kc-p2 .kb-col-dot    { background: #7F77DD; }
+#twa-kanban .kc-p2 .kb-col-label  { color: #7F77DD; }
+#twa-kanban .kc-p2 .kb-col-prog-fill { background: #7F77DD; }
+#twa-kanban .kc-p3 .kb-col-header { border-color: #854F0B; }
+#twa-kanban .kc-p3 .kb-col-dot    { background: #EF9F27; }
+#twa-kanban .kc-p3 .kb-col-label  { color: #EF9F27; }
+#twa-kanban .kc-p3 .kb-col-prog-fill { background: #EF9F27; }
+#twa-kanban .kc-p4 .kb-col-header { border-color: #712B13; }
+#twa-kanban .kc-p4 .kb-col-dot    { background: #D85A30; }
+#twa-kanban .kc-p4 .kb-col-label  { color: #D85A30; }
+#twa-kanban .kc-p4 .kb-col-prog-fill { background: #D85A30; }
+#twa-kanban .kc-done .kb-col-header { border-color: #63C741; }
+#twa-kanban .kc-done .kb-col-dot    { background: #63C741; }
+#twa-kanban .kc-done .kb-col-label  { color: #63C741; }
+#twa-kanban .kc-done .kb-col-prog-fill { background: #63C741; }
+
+/* CARDS */
+#twa-kanban .kb-card {
+  background: #242320; border: 1px solid #2E2D28; border-radius: 8px;
+  padding: 10px 12px; cursor: pointer; transition: all 0.18s; position: relative; overflow: hidden; user-select: none;
+}
+#twa-kanban .kb-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  border-radius: 8px 0 0 8px; opacity: 0; transition: opacity 0.2s;
+}
+#twa-kanban .kb-card:hover { border-color: #3A3935; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+#twa-kanban .kb-card:hover::before { opacity: 1; }
+#twa-kanban .kc-p1 .kb-card::before { background: #1D9E75; }
+#twa-kanban .kc-p2 .kb-card::before { background: #7F77DD; }
+#twa-kanban .kc-p3 .kb-card::before { background: #EF9F27; }
+#twa-kanban .kc-p4 .kb-card::before { background: #D85A30; }
+#twa-kanban .kc-done .kb-card::before { background: #63C741; }
+
+#twa-kanban .kb-card.kb-done { opacity: 0.55; background: #1C1B17; }
+#twa-kanban .kb-card.kb-done .kb-card-text { text-decoration: line-through; color: #5A5955; }
+
+#twa-kanban .kb-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+#twa-kanban .kb-card-text { font-size: 12px; color: #E8E6DF; line-height: 1.5; flex: 1; transition: color 0.2s; }
+#twa-kanban .kb-check {
+  width: 18px; height: 18px; border: 1.5px solid #3A3935; border-radius: 4px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-top: 1px; background: transparent;
+}
+#twa-kanban .kb-card.kb-done .kb-check { background: #63C741; border-color: #63C741; }
+#twa-kanban .kb-card.kb-done .kb-check::after { content: '✓'; color: #fff; font-size: 11px; font-weight: 700; }
+
+#twa-kanban .kb-card-meta { display: flex; align-items: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+#twa-kanban .kb-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 3px; letter-spacing: 0.04em; font-weight: 500; }
+#twa-kanban .t-drive   { background: #0A2E22; color: #5DCAA5; border: 1px solid #0F6E56; }
+#twa-kanban .t-doc     { background: #15133A; color: #7F77DD; border: 1px solid #534AB7; }
+#twa-kanban .t-upload  { background: #0A2E22; color: #5DCAA5; border: 1px solid #0F6E56; }
+#twa-kanban .t-claude  { background: #15133A; color: #7F77DD; border: 1px solid #534AB7; }
+#twa-kanban .t-test    { background: #2A1E08; color: #EF9F27; border: 1px solid #854F0B; }
+#twa-kanban .t-meeting { background: #15133A; color: #7F77DD; border: 1px solid #534AB7; }
+#twa-kanban .t-ops     { background: #2A1E08; color: #EF9F27; border: 1px solid #854F0B; }
+#twa-kanban .t-admin   { background: #0A2E22; color: #5DCAA5; border: 1px solid #0F6E56; }
+#twa-kanban .t-progmgr { background: #2A1E08; color: #EF9F27; border: 1px solid #854F0B; }
+#twa-kanban .t-video   { background: #2A1108; color: #D85A30; border: 1px solid #712B13; }
+#twa-kanban .t-social  { background: #15133A; color: #7F77DD; border: 1px solid #534AB7; }
+#twa-kanban .t-launch  { background: #2A1108; color: #D85A30; border: 1px solid #712B13; }
+#twa-kanban .t-monthly { background: #1A1A18; color: #888780; border: 1px solid #444441; }
+#twa-kanban .t-qtrly   { background: #1A1A18; color: #888780; border: 1px solid #444441; }
+
+#twa-kanban .kb-empty-col { border: 1px dashed #2E2D28; border-radius: 8px; padding: 20px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #5A5955; }
+
+#twa-kanban .kb-col-label-text { display: none; }
+@media (max-width: 900px) {
+  #twa-kanban .kb-board { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 600px) {
+  #twa-kanban .kb-board { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<div id="twa-kanban">
+
+  <div class="kb-topbar">
+    <div class="kb-topbar-left">
+      <div class="kb-logo">A&#937;</div>
+      <div>
+        <div class="kb-board-title">TWA &times; Claude &mdash; Rollout Board</div>
+        <div class="kb-board-sub">Adam M. Lamb &middot; Chef Life Media LLC &middot; Private</div>
+      </div>
+    </div>
+    <div class="kb-topbar-right">
+      <div class="kb-progress-wrap">
+        <span>Overall</span>
+        <div class="kb-total-bar"><div class="kb-total-fill" id="kb-total-fill"></div></div>
+        <span class="kb-total-pct" id="kb-total-pct">0%</span>
+      </div>
+      <button class="kb-reset-btn" onclick="kbResetAll()">Reset</button>
+    </div>
+  </div>
+
+  <div class="kb-board" id="kb-board">
+    <div class="kb-col kc-p1" id="kb-col-p1">
+      <div class="kb-col-header">
+        <div class="kb-col-label"><div class="kb-col-dot"></div>Phase 1 &mdash; Foundation</div>
+        <div class="kb-col-count" id="kb-count-p1">0</div>
+      </div>
+      <div class="kb-col-progress"><div class="kb-col-prog-fill" id="kb-prog-p1"></div></div>
+    </div>
+    <div class="kb-col kc-p2" id="kb-col-p2">
+      <div class="kb-col-header">
+        <div class="kb-col-label"><div class="kb-col-dot"></div>Phase 2 &mdash; Jeannie</div>
+        <div class="kb-col-count" id="kb-count-p2">0</div>
+      </div>
+      <div class="kb-col-progress"><div class="kb-col-prog-fill" id="kb-prog-p2"></div></div>
+    </div>
+    <div class="kb-col kc-p3" id="kb-col-p3">
+      <div class="kb-col-header">
+        <div class="kb-col-label"><div class="kb-col-dot"></div>Phase 3 &mdash; Onboarding</div>
+        <div class="kb-col-count" id="kb-count-p3">0</div>
+      </div>
+      <div class="kb-col-progress"><div class="kb-col-prog-fill" id="kb-prog-p3"></div></div>
+    </div>
+    <div class="kb-col kc-p4" id="kb-col-p4">
+      <div class="kb-col-header">
+        <div class="kb-col-label"><div class="kb-col-dot"></div>Phase 4&ndash;5 &mdash; Launch</div>
+        <div class="kb-col-count" id="kb-count-p4">0</div>
+      </div>
+      <div class="kb-col-progress"><div class="kb-col-prog-fill" id="kb-prog-p4"></div></div>
+    </div>
+    <div class="kb-col kc-done" id="kb-col-done">
+      <div class="kb-col-header">
+        <div class="kb-col-label"><div class="kb-col-dot"></div>Done</div>
+        <div class="kb-col-count" id="kb-count-done">0</div>
+      </div>
+      <div class="kb-col-progress"><div class="kb-col-prog-fill" id="kb-prog-done"></div></div>
+      <div class="kb-empty-col" id="kb-done-empty">No completed items yet</div>
+    </div>
+  </div>
+
+</div><!-- /#twa-kanban -->
+
+<script>
+const TASKS = [
+  // PHASE 1 — FOUNDATION
+  { id:'p1-1',  phase:'p1', tag:'drive',    label:'Create _AI Operations folder in TWA Google Drive' },
+  { id:'p1-2',  phase:'p1', tag:'drive',    label:'Create _AI Outputs with all 9 role subfolders (Drafts + Approved each)' },
+  { id:'p1-3',  phase:'p1', tag:'drive',    label:'Create _AI Archive folder mirroring the Outputs structure' },
+  { id:'p1-4',  phase:'p1', tag:'drive',    label:'Set folder permissions: _AI Operations = Jeannie + you · team = view only' },
+  { id:'p1-5',  phase:'p1', tag:'doc',      label:'Write MASTER - Claude Project Instructions.md (finalize draft)' },
+  { id:'p1-6',  phase:'p1', tag:'doc',      label:'Write MASTER - Brand Voice Document.md (template for Jeannie)' },
+  { id:'p1-7',  phase:'p1', tag:'doc',      label:'Write MASTER - Avatar Profile.md (template for Jeannie)' },
+  { id:'p1-8',  phase:'p1', tag:'doc',      label:'Write MASTER - Offer Library.md (pre-fill from site, Jeannie confirms)' },
+  { id:'p1-9',  phase:'p1', tag:'doc',      label:'Write MASTER - How To Set Up Claude.md (step-by-step, no assumptions)' },
+  { id:'p1-10', phase:'p1', tag:'doc',      label:'Write MASTER - Output Naming Convention.md (rules + cheat sheet)' },
+  { id:'p1-11', phase:'p1', tag:'upload',   label:'Upload TWA_AI_System_Overview.html to _AI Operations' },
+  { id:'p1-12', phase:'p1', tag:'claude',   label:'Create "The Wide Awakening" Project in your Claude account' },
+  { id:'p1-13', phase:'p1', tag:'claude',   label:'Paste master instructions · upload all 3 Knowledge documents' },
+  { id:'p1-14', phase:'p1', tag:'test',     label:'Run 3 test sessions: voice check · research · content repurposing' },
+  { id:'p1-15', phase:'p1', tag:'test',     label:'Fix any instruction issues before rolling out to team' },
+
+  // PHASE 2 — JEANNIE
+  { id:'p2-1',  phase:'p2', tag:'meeting',  label:'Walk Jeannie through the system map visual' },
+  { id:'p2-2',  phase:'p2', tag:'meeting',  label:'Define what "approved" actually means — her call' },
+  { id:'p2-3',  phase:'p2', tag:'meeting',  label:'Review and finalize Brand Voice Document together' },
+  { id:'p2-4',  phase:'p2', tag:'meeting',  label:'Review and finalize Avatar Profile together' },
+  { id:'p2-5',  phase:'p2', tag:'meeting',  label:'Confirm Offer Library is accurate and complete' },
+  { id:'p2-6',  phase:'p2', tag:'ops',      label:'Agree on Drafts review cadence (daily or every 48 hrs)' },
+  { id:'p2-7',  phase:'p2', tag:'ops',      label:'Agree on approval signal: comment, move file, or Slack ping' },
+  { id:'p2-8',  phase:'p2', tag:'claude',   label:"Set up Jeannie's own Claude Project" },
+  { id:'p2-9',  phase:'p2', tag:'drive',    label:'Give Jeannie edit access to _AI Operations in Drive' },
+  { id:'p2-10', phase:'p2', tag:'ops',      label:'Create Trello card template or Slack #ai-review channel' },
+  { id:'p2-11', phase:'p2', tag:'ops',      label:'Decide: team pings Jeannie vs. she checks on a schedule' },
+
+  // PHASE 3 — INDIVIDUAL ONBOARDING
+  { id:'p3-1',  phase:'p3', tag:'admin',    label:'Admin: Send setup doc 48 hrs before session' },
+  { id:'p3-2',  phase:'p3', tag:'admin',    label:'Admin: Confirm Claude Pro active · walk through Project setup' },
+  { id:'p3-3',  phase:'p3', tag:'admin',    label:'Admin: Live demo — research brief on real collaborator' },
+  { id:'p3-4',  phase:'p3', tag:'admin',    label:'Admin: Deliver role-specific prompt playbook (5–7 prompts)' },
+  { id:'p3-5',  phase:'p3', tag:'admin',    label:'Admin: Save first output to Drafts folder together' },
+  { id:'p3-6',  phase:'p3', tag:'progmgr',  label:'Program Mgr: Send setup doc 48 hrs before session' },
+  { id:'p3-7',  phase:'p3', tag:'progmgr',  label:'Program Mgr: Confirm Claude Pro active · walk through setup' },
+  { id:'p3-8',  phase:'p3', tag:'progmgr',  label:'Program Mgr: Live demo — webinar outline or event plan' },
+  { id:'p3-9',  phase:'p3', tag:'progmgr',  label:'Program Mgr: Deliver prompt playbook · save first output' },
+  { id:'p3-10', phase:'p3', tag:'video',    label:'Video Editor: Send setup doc 48 hrs before session' },
+  { id:'p3-11', phase:'p3', tag:'video',    label:'Video Editor: Confirm Claude Pro active · walk through setup' },
+  { id:'p3-12', phase:'p3', tag:'video',    label:'Video Editor: Live demo — transcript → clip concepts + SEO' },
+  { id:'p3-13', phase:'p3', tag:'video',    label:'Video Editor: Deliver prompt playbook · save first output' },
+  { id:'p3-14', phase:'p3', tag:'social',   label:'Social: Send setup doc 48 hrs before session' },
+  { id:'p3-15', phase:'p3', tag:'social',   label:'Social: Confirm Claude Pro active · walk through setup' },
+  { id:'p3-16', phase:'p3', tag:'social',   label:'Social: Live demo — 2-week content calendar for real event' },
+  { id:'p3-17', phase:'p3', tag:'social',   label:'Social: Deliver prompt playbook · save first output' },
+
+  // PHASE 4–5 — TEAM LAUNCH + MAINTENANCE
+  { id:'p4-1',  phase:'p4', tag:'launch',   label:'Full team session: show system map visual · walk through flow' },
+  { id:'p4-2',  phase:'p4', tag:'launch',   label:'Demo connected workflow: Video → Social captions → Admin email' },
+  { id:'p4-3',  phase:'p4', tag:'launch',   label:'Review Output Naming Convention with full team' },
+  { id:'p4-4',  phase:'p4', tag:'launch',   label:'Confirm Drafts → Jeannie → Approved is understood by all' },
+  { id:'p4-5',  phase:'p4', tag:'launch',   label:'Set 30-day check-in date on the calendar' },
+  { id:'p4-6',  phase:'p4', tag:'launch',   label:'Open Q&A — capture friction points, close gaps' },
+  { id:'p4-7',  phase:'p4', tag:'monthly',  label:'[Monthly] Update Offer Library when programs/pricing change' },
+  { id:'p4-8',  phase:'p4', tag:'monthly',  label:'[Monthly] Notify team of any MASTER doc updates' },
+  { id:'p4-9',  phase:'p4', tag:'monthly',  label:'[Monthly] Archive Approved outputs older than 90 days' },
+  { id:'p4-10', phase:'p4', tag:'monthly',  label:'[Monthly] Prune Drafts — delete abandoned or superseded files' },
+  { id:'p4-11', phase:'p4', tag:'qtrly',    label:'[Quarterly] Review Project Instructions for accuracy' },
+  { id:'p4-12', phase:'p4', tag:'qtrly',    label:'[Quarterly] Identify new role-specific workflows from feedback' },
+  { id:'p4-13', phase:'p4', tag:'qtrly',    label:'[Quarterly] Evaluate Claude Team plan upgrade' },
+  { id:'p4-14', phase:'p4', tag:'qtrly',    label:'[Quarterly] Deliver intelligence report: working/drifting/next' },
+];
+
+const KB_TAG_MAP = {
+  drive:'t-drive',doc:'t-doc',upload:'t-upload',claude:'t-claude',test:'t-test',
+  meeting:'t-meeting',ops:'t-ops',admin:'t-admin',progmgr:'t-progmgr',video:'t-video',
+  social:'t-social',launch:'t-launch',monthly:'t-monthly',qtrly:'t-qtrly'
+};
+
+const KB_TAG_LABELS = {
+  drive:'Drive',doc:'Doc',upload:'Upload',claude:'Claude',test:'Test',
+  meeting:'Meeting',ops:'Ops',admin:'Admin',progmgr:'Prog Mgr',video:'Video',
+  social:'Social',launch:'Launch',monthly:'Monthly',qtrly:'Quarterly'
+};
+
+let kbState = {};
+
+function kbLoadState() {
+  try { kbState = JSON.parse(localStorage.getItem('twa-kanban') || '{}'); } catch(e) { kbState = {}; }
+}
+
+function kbSaveState() {
+  try { localStorage.setItem('twa-kanban', JSON.stringify(kbState)); } catch(e) {}
+}
+
+function kbBuildCard(task) {
+  const done = !!kbState[task.id];
+  const tagClass = KB_TAG_MAP[task.tag] || 't-monthly';
+  const tagLabel = KB_TAG_LABELS[task.tag] || task.tag;
+  const div = document.createElement('div');
+  div.className = 'kb-card' + (done ? ' kb-done' : '');
+  div.dataset.id = task.id;
+  div.innerHTML = '<div class="kb-card-top"><div class="kb-card-text">' + task.label + '</div><div class="kb-check"></div></div><div class="kb-card-meta"><span class="kb-tag ' + tagClass + '">' + tagLabel + '</span></div>';
+  div.addEventListener('click', () => kbToggleCard(task.id));
+  return div;
+}
+
+function kbRender() {
+  ['p1','p2','p3','p4'].forEach(ph => {
+    const col = document.getElementById('kb-col-' + ph);
+    col.querySelectorAll('.kb-card').forEach(c => c.remove());
+  });
+  const doneCol = document.getElementById('kb-col-done');
+  doneCol.querySelectorAll('.kb-card').forEach(c => c.remove());
+
+  const counts = {p1:0,p2:0,p3:0,p4:0,done:0};
+  const totals  = {p1:0,p2:0,p3:0,p4:0};
+
+  TASKS.forEach(task => {
+    totals[task.phase]++;
+    if (kbState[task.id]) {
+      counts.done++;
+      doneCol.appendChild(kbBuildCard(task));
+    } else {
+      counts[task.phase]++;
+      document.getElementById('kb-col-' + task.phase).appendChild(kbBuildCard(task));
+    }
+  });
+
+  ['p1','p2','p3','p4'].forEach(p => {
+    const done = totals[p] - counts[p];
+    document.getElementById('kb-count-' + p).textContent = counts[p];
+    document.getElementById('kb-prog-' + p).style.width = totals[p] ? Math.round((done/totals[p])*100)+'%' : '0%';
+  });
+
+  const doneEmpty = document.getElementById('kb-done-empty');
+  doneEmpty.style.display = counts.done === 0 ? 'block' : 'none';
+  document.getElementById('kb-count-done').textContent = counts.done;
+  document.getElementById('kb-prog-done').style.width = TASKS.length ? Math.round((counts.done/TASKS.length)*100)+'%' : '0%';
+
+  const pct = TASKS.length ? Math.round((counts.done/TASKS.length)*100) : 0;
+  document.getElementById('kb-total-fill').style.width = pct+'%';
+  document.getElementById('kb-total-pct').textContent = pct+'%';
+}
+
+function kbToggleCard(id) {
+  kbState[id] = !kbState[id];
+  kbSaveState();
+  kbRender();
+}
+
+function kbResetAll() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    kbState = {};
+    kbSaveState();
+    kbRender();
+  }
+}
+
+kbLoadState();
+kbRender();
+</script>
+</body>
+</html>
