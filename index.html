@@ -1635,37 +1635,51 @@ body {
         <li class="step-item">
           <span class="step-num">05</span>
           <div class="step-content">
-            <div class="step-title">Paste the Project Instructions (system prompt)</div>
-            <div class="step-detail">In Project Settings → <strong>Project Instructions</strong>, paste the full TWA Claude OS system prompt (the shared Project Instructions document). This is the same base prompt for all team members. The role-specific customization comes from Project Knowledge, not the instructions — so all 6 Projects share the same instructions.</div>
+            <div class="step-title">Paste the Project Instructions — keep them lean</div>
+            <div class="step-detail">In Project Settings → <strong>Project Instructions</strong>, paste the shared TWA system prompt: the role, the operating rules, and a <strong>one-paragraph summary of the Output Naming Convention</strong> (so every file it generates is named correctly without looking it up). Keep this lean — instructions are injected into <em>every</em> message, so they hold behaviour and rules, <strong>not</strong> full documents. End with a pointer: <em>"Your foundational context is in Project Knowledge; pull anything else from the Shared Drive."</em></div>
           </div>
         </li>
         <li class="step-item">
           <span class="step-num">06</span>
           <div class="step-content">
-            <div class="step-title">Add the six MASTER documents as Project Knowledge</div>
-            <div class="step-detail">In Project Settings → <strong>Project Knowledge → Add Content → Paste Text</strong>. Open each MASTER document from the Shared Drive (via Drive for Desktop or browser), copy the full text, and paste into Claude. Add one document at a time. Name each piece exactly as the document is named in Drive: <code>MASTER — Brand Voice</code>, etc.</div>
+            <div class="step-title">Add the three foundation docs as Project Knowledge</div>
+            <div class="step-detail">In Project Settings → <strong>Project Knowledge → Add Content → Paste Text</strong>, load the three docs relevant to nearly every task, so they stay always-on: <code>Brand Voice</code>, <code>Avatar Profile</code>, <code>Offer Library</code>. Paste one at a time, named as in Drive. <strong>Don't</strong> load the setup/reference docs here (How To Set Up Claude, System Overview, README) — those live in Drive (Step 09).</div>
           </div>
         </li>
         <li class="step-item">
           <span class="step-num">07</span>
           <div class="step-content">
-            <div class="step-title">Add the role-specific Prompt Playbook section</div>
-            <div class="step-detail">From the TWA Prompt Playbook Reference, copy the section for this team member's role and paste it as an additional Project Knowledge item named <code>Prompt Playbook — [Role]</code>. This gives them quick-reference prompts without needing to open the HTML document.</div>
+            <div class="step-title">Add a "Style Exemplars" file — the highest-leverage add</div>
+            <div class="step-detail">Add one more Knowledge item: <strong>2–4 annotated best examples</strong> of what great output looks like for this role — e.g. for Social/Content, 2–3 of the strongest <em>The Wide Awakening Weekly</em> newsletters, each with a sentence on <em>why</em> it works. <strong>Few, curated, annotated beats many.</strong> Don't dump the whole archive here — that lives in Drive.</div>
           </div>
         </li>
         <li class="step-item">
           <span class="step-num">08</span>
           <div class="step-content">
+            <div class="step-title">Add the role-specific Prompt Playbook section</div>
+            <div class="step-detail">From the Prompt Playbook tab, copy the section for this team member's role and paste it as an additional Project Knowledge item named <code>Prompt Playbook — [Role]</code>. Quick-reference prompts without opening the playbook each time.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">09</span>
+          <div class="step-content">
+            <div class="step-title">Leave everything else in the Shared Drive — pull on demand</div>
+            <div class="step-detail">Keep the setup/reference docs (How To Set Up Claude, System Overview, README) and the <strong>full archive</strong> of past outputs and newsletters in Drive. Connect Drive to the Project (or open the file) only when a task actually needs them. This keeps Project Knowledge focused and the context flexible — lean Knowledge loads cleanly; bloated Knowledge makes retrieval noisier and quality drops.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <span class="step-num">10</span>
+          <div class="step-content">
             <div class="step-title">Run the verification prompt</div>
-            <div class="step-detail">Start a new conversation in the Project. Type: <em>"Summarize TWA's current offer ecosystem and tell me who our ideal client is."</em> The response should accurately reflect both the Offer Library and Avatar Profile. If it gives generic answers, the Project Knowledge didn't load correctly — return to Step 6.</div>
+            <div class="step-detail">Start a new conversation in the Project. Type: <em>"Summarize TWA's current offer ecosystem and tell me who our ideal client is."</em> The response should accurately reflect both the Offer Library and Avatar Profile. If it gives generic answers, the Project Knowledge didn't load correctly — return to Step 06.</div>
           </div>
         </li>
       </ul>
     </div>
 
     <div class="callout callout-gold">
-      <strong>Project Knowledge Limit</strong>
-      Claude Pro Projects support up to approximately 200,000 tokens of Project Knowledge (roughly 150,000 words). The six MASTER documents plus a role Playbook should use well under half that. You have significant room to add more reference material as the system evolves.
+      <strong>Keep Project Knowledge Focused</strong>
+      Claude Pro Projects hold a large knowledge base, but more isn't better. Put the <strong>always-relevant</strong> material in Knowledge (the 3 foundation docs + Style Exemplars + role Playbook) and keep <strong>situational or large</strong> material in Drive, pulled on demand. Focused Knowledge loads fully and reasons cleanly; an overloaded base dilutes retrieval and adds noise.
     </div>
 
     <div class="subsection">
@@ -1674,7 +1688,7 @@ body {
         <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>5–6 Claude Pro accounts created with @thewideawakening.com emails</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Each account has a named role Project created</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Project Instructions (system prompt) pasted into all Projects</span></li>
-        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>All 6 MASTER documents loaded into each Project's Knowledge</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Foundation docs (Brand Voice, Avatar Profile, Offer Library) + Style Exemplars in Project Knowledge</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Role-specific Prompt Playbook section loaded per team member</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box">✓</div><span>Verification prompt run and passed for each Project</span></li>
       </ul>
