@@ -10,35 +10,36 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* ── Chef Life Media brand palette: brick red + gold on warm cream/ink ── */
-  --ink: #1A1209;          /* warm near-black (logo lettering) */
-  --paper: #F6EFE2;        /* warm cream (logo inner field) */
-  --warm: #EFE6D5;
-  --warm-mid: #E0D2BB;
-  --warm-dark: #B8A98A;
-  --gold: #C0871F;         /* deep gold — text-safe on light */
-  --gold-light: #E2A949;   /* logo ring gold */
-  --gold-pale: #F3DFAC;
-  /* --teal repurposed as BRICK RED (primary accent) so existing classes inherit brand */
-  --teal: #A6342A;         /* brick red (logo "MEDIA") */
-  --teal-light: #C2503E;
-  --teal-pale: #EEC9C1;
-  --rust: #BC4A2C;         /* warm terracotta */
-  --rust-pale: #F1D2C5;
-  /* --violet repurposed as warm brown */
-  --violet: #7A4A24;
-  --violet-pale: #E4D2BA;
-  --text: #211913;
-  --text-mid: #4E4034;
-  --text-dim: #7E6F60;
-  --text-muted: #A99A86;
-  --border: #D8C8AE;
-  --border-light: #E9DDC6;
-  --shadow: rgba(26,18,9,0.10);
+  /* ── The Wide Awakening brand palette (sampled from thewideawakening.com) ──
+     deep indigo chrome · magenta-pink primary · blue + gold accents          */
+  --ink: #1A0066;          /* deep indigo (TWA cosmic) — chrome backgrounds */
+  --paper: #F8F6FC;        /* clean cool white */
+  --warm: #EFEAF8;         /* light lavender card */
+  --warm-mid: #DDD2F0;
+  --warm-dark: #B9A9D8;    /* muted lavender on dark */
+  --gold: #B8893C;         /* deep gold (logo sun) — text-safe on light */
+  --gold-light: #E8B84A;   /* bright gold */
+  --gold-pale: #F3E6BE;
+  /* --teal repurposed as TWA MAGENTA (primary accent) so existing classes inherit brand */
+  --teal: #E0218A;         /* magenta-pink (#f03a77 family) */
+  --teal-light: #F03A77;
+  --teal-pale: #F8CDE2;
+  /* --rust repurposed as TWA BLUE */
+  --rust: #1C7EB1;         /* teal-blue (#1c7eb1 / #007cd8) */
+  --rust-pale: #C9E2F0;
+  --violet: #4A217B;       /* deep purple (#4a217b / #271175) */
+  --violet-pale: #DFC7ED;  /* their actual lavender */
+  --text: #1E163A;         /* deep indigo-ink text on light */
+  --text-mid: #4A4170;
+  --text-dim: #756B92;
+  --text-muted: #A99FC0;
+  --border: #DCD2EC;
+  --border-light: #EBE4F6;
+  --shadow: rgba(26,0,102,0.12);
   /* explicit brand tokens for the collaboration UI */
-  --brick: #A6342A;
-  --brick-dark: #87271F;
-  --gold-deep: #B07A1A;
+  --brick: #E0218A;        /* magenta (primary attention) */
+  --brick-dark: #C01C74;
+  --gold-deep: #A8761F;
 }
 
 html { scroll-behavior: smooth; }
@@ -81,8 +82,9 @@ body {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   background:
-    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(226,169,73,0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 400px 300px at 20% 80%, rgba(166,52,42,0.14) 0%, transparent 70%);
+    radial-gradient(ellipse 600px 400px at 80% 50%, rgba(232,184,74,0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 480px 320px at 18% 78%, rgba(224,33,138,0.20) 0%, transparent 70%),
+    radial-gradient(ellipse 420px 360px at 50% 0%, rgba(46,163,242,0.14) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -427,10 +429,10 @@ body {
   margin: 2px 3px 2px 0;
 }
 
-.tag-gold { color: var(--gold-deep); border-color: var(--gold); background: rgba(226,169,73,0.10); }
-.tag-teal { color: var(--teal); border-color: var(--teal); background: rgba(166,52,42,0.07); }
-.tag-rust { color: var(--rust); border-color: var(--rust); background: rgba(188,74,44,0.07); }
-.tag-violet { color: var(--violet); border-color: var(--violet); background: rgba(122,74,36,0.08); }
+.tag-gold { color: var(--gold-deep); border-color: var(--gold); background: rgba(232,184,74,0.12); }
+.tag-teal { color: var(--teal); border-color: var(--teal); background: rgba(224,33,138,0.08); }
+.tag-rust { color: var(--rust); border-color: var(--rust); background: rgba(28,126,177,0.08); }
+.tag-violet { color: var(--violet); border-color: var(--violet); background: rgba(74,33,123,0.08); }
 .tag-ink { color: var(--ink); border-color: var(--ink); background: rgba(10,9,8,0.05); }
 
 /* ── ROLE TABLE ── */
@@ -509,9 +511,9 @@ body {
   line-height: 1.65;
 }
 
-.callout-gold { background: rgba(226,169,73,0.10); border-color: var(--gold); color: var(--text-mid); }
-.callout-teal { background: rgba(166,52,42,0.07); border-color: var(--teal); color: var(--text-mid); }
-.callout-rust { background: rgba(188,74,44,0.07); border-color: var(--rust); color: var(--text-mid); }
+.callout-gold { background: rgba(232,184,74,0.12); border-color: var(--gold); color: var(--text-mid); }
+.callout-teal { background: rgba(224,33,138,0.08); border-color: var(--teal); color: var(--text-mid); }
+.callout-rust { background: rgba(28,126,177,0.08); border-color: var(--rust); color: var(--text-mid); }
 
 .callout strong {
   display: block;
@@ -673,17 +675,17 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   background: var(--ink);
-  color: #C9B79A;
+  color: #C3B3E4;
   padding: 24px 28px;
   line-height: 2.1;
   margin: 12px 0;
   border: 1px solid var(--border);
 }
 
-.folder-tree .dir { color: #E2A949; }
-.folder-tree .file { color: #E0C089; }
-.folder-tree .comment { color: #8A7A64; font-style: italic; }
-.folder-tree .new { color: #D98C5A; }
+.folder-tree .dir { color: #E8B84A; }
+.folder-tree .file { color: #C9B7EC; }
+.folder-tree .comment { color: #8E80B6; font-style: italic; }
+.folder-tree .new { color: #F03A77; }
 
 /* ── WORKSPACE MAP ── */
 .ws-grid {
@@ -782,6 +784,8 @@ body {
 }
 
 .footer-text span { color: var(--gold); opacity: 1; }
+.footer-text a { color: var(--gold-light); text-decoration: none; opacity: 1; }
+.footer-text a:hover { text-decoration: underline; }
 
 /* ── BRAND LOGO ── */
 .topbar-brand { display: flex; align-items: center; gap: 10px; }
@@ -790,14 +794,17 @@ body {
   display: inline-flex;
   align-items: center;
   background: var(--paper);
-  border-radius: 10px;
-  padding: 9px 16px;
-  margin-bottom: 26px;
-  box-shadow: 0 6px 22px rgba(0,0,0,0.28);
+  border-radius: 12px;
+  padding: 12px 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.30);
   position: relative;
   z-index: 2;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.hero-masthead img { height: 38px; width: auto; display: block; }
+.hero-masthead:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(0,0,0,0.38); }
+.hero-masthead img { height: 50px; width: auto; display: block; }
 .hero-logo {
   position: absolute;
   top: 36px; right: 48px;
@@ -861,13 +868,13 @@ body {
 .collab-stat b { color: var(--gold-light); }
 .collab-reset {
   width: 100%; margin-top: 10px; cursor: pointer;
-  background: transparent; color: var(--rust);
-  border: 1px solid rgba(188,74,44,0.5);
+  background: transparent; color: var(--teal-light);
+  border: 1px solid rgba(224,33,138,0.5);
   font-family: 'JetBrains Mono', monospace; font-size: 9px;
   letter-spacing: 0.12em; text-transform: uppercase; padding: 7px;
   transition: all 0.15s;
 }
-.collab-reset:hover { background: rgba(188,74,44,0.16); color: #E88; }
+.collab-reset:hover { background: rgba(224,33,138,0.16); color: #F58BC0; }
 .collab-collapse {
   position: absolute; top: 10px; right: 12px; cursor: pointer;
   color: var(--warm-dark); background: none; border: none; font-size: 14px; line-height: 1;
@@ -929,17 +936,15 @@ body {
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <span class="topbar-brand">
-    <img class="topbar-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
-    <span class="topbar-left">TWA CLAUDE OS · WORKSPACE IMPLEMENTATION GUIDE</span>
-  </span>
+  <span class="topbar-left">TWA CLAUDE OS · WORKSPACE IMPLEMENTATION GUIDE</span>
   <span class="live-chip"><span class="live-dot" id="live-dot"></span><span id="live-chip-text">0 / 28 LIVE</span></span>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <img class="hero-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
-  <div class="hero-masthead"><img src="twa-logo.png" alt="The Wide Awakening" onerror="this.parentNode.style.display='none'"></div>
+  <a class="hero-masthead" href="https://thewideawakening.com/" target="_blank" rel="noopener" title="thewideawakening.com">
+    <img src="twa-logo.png" alt="The Wide Awakening" onerror="this.parentNode.style.display='none'">
+  </a>
   <div class="hero-tag">The Wide Awakening · Google Workspace</div>
   <h1>Claude OS<br><em>Implementation Guide</em></h1>
   <p class="hero-sub">A complete playbook for deploying the TWA Claude operating system across the @thewideawakening.com Google Workspace — from account setup through full team activation.</p>
@@ -1836,10 +1841,13 @@ body {
 
 <!-- FOOTER -->
 <div class="footer">
-  <div class="footer-text">The Wide Awakening · <span>Claude OS</span> · Google Workspace Implementation Guide · v1.0 · June 2026</div>
+  <div class="footer-text">
+    <a href="https://thewideawakening.com/" target="_blank" rel="noopener">thewideawakening.com</a>
+    · <span>Claude OS</span> · Google Workspace Implementation Guide · v1.0 · June 2026
+  </div>
   <div style="display:flex; align-items:center; gap:12px;">
+    <div class="footer-text" style="text-align:right;">Service provider · <span>Chef Life Media LLC</span><br>adam@cheflifemedia.com</div>
     <img class="footer-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
-    <div class="footer-text">Built by <span>Chef Life Media LLC</span> · adam@cheflifemedia.com</div>
   </div>
 </div>
 
