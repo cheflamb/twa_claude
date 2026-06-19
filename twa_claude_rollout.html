@@ -75,12 +75,37 @@
   .phead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
   #pb-panel{display:none}
   @media(max-width:780px){.stats{grid-template-columns:repeat(2,1fr)}.grid2,.grid3,.flow{grid-template-columns:1fr}}
+  /* ── brand logos ── */
+  .hero-mast{display:inline-flex;align-items:center;background:#fff;border-radius:12px;padding:10px 16px;margin-bottom:18px;box-shadow:0 8px 24px rgba(0,0,0,.22);text-decoration:none}
+  .hero-mast img{height:42px;width:auto;display:block}
+  .foot-row{display:flex;align-items:center;gap:12px;margin-top:16px}
+  .foot-logo{height:30px;width:auto;display:block}
+  .foot-sp{font-size:12.5px;color:var(--muted)}.foot-sp b{color:var(--plum)}
+  /* ── live checklist ── */
+  .live-check{list-style:none;padding-left:0!important}
+  .live-check li{display:flex;gap:10px;align-items:flex-start;cursor:pointer;margin:8px 0;flex-wrap:wrap}
+  .live-check li .cbx{flex:0 0 18px;width:18px;height:18px;border:1.6px solid var(--line);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:transparent;background:#fff;transition:all .15s;margin-top:2px}
+  .live-check li.done .cbx{background:var(--indigo);border-color:var(--indigo);color:#fff}
+  .live-check li .ctext{flex:1 1 auto;min-width:0}
+  .live-check li.done .ctext{color:var(--muted);text-decoration:line-through}
+  .live-check li .by{flex-basis:100%;padding-left:28px;font-size:11px;color:var(--purple);font-family:"SFMono-Regular",Consolas,Menlo,monospace}
+  .live-check li .by:empty{display:none}
+  .livebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 18px}
+  .livedot{width:8px;height:8px;border-radius:50%;background:#2e7d6b;box-shadow:0 0 0 0 rgba(46,125,107,.5);animation:lp 2s infinite;flex:0 0 8px}
+  .livedot.off{background:var(--muted);animation:none;box-shadow:none}
+  @keyframes lp{0%{box-shadow:0 0 0 0 rgba(46,125,107,.5)}70%{box-shadow:0 0 0 7px rgba(46,125,107,0)}100%{box-shadow:0 0 0 0 rgba(46,125,107,0)}}
+  .livebar .lcount{font-weight:800;color:var(--plum);font-size:14px}
+  .livebar .lname{flex:1 1 150px;min-width:0;padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px}
+  .livebar .lreset{border:1px solid #e0c0c0;color:#b04a4a;background:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+  .livebar .lreset:hover{background:#fbeaea}
+  .livebar .lhint{flex-basis:100%;font-size:12px;color:var(--muted);margin:2px 0 0}
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap">
+    <a class="hero-mast" href="https://thewideawakening.com/" target="_blank" rel="noopener" title="thewideawakening.com"><img src="twa-logo.png" alt="The Wide Awakening" onerror="this.parentNode.style.display='none'"></a>
     <div class="eyebrow">The Wide Awakening</div>
     <h1>Claude OS — Implementation Guide</h1>
     <p class="lead">A shared, on-brand AI operating system that lives on our Google Drive — built so anyone on the team can produce excellent, Jennifer-voiced work without being technical. <strong>The folder does the thinking; your tools do the doing.</strong></p>
@@ -231,9 +256,16 @@
   <div class="wrap">
     <div class="kicker">Where things stand</div>
     <h2>Built &amp; what's left</h2>
+    <div class="livebar">
+      <span class="livedot off" id="bdot"></span>
+      <span class="lcount" id="bcount">connecting…</span>
+      <input class="lname" id="bname" placeholder="Your name (optional)" maxlength="24" autocomplete="off">
+      <button class="lreset" id="breset">Reset all · admin 🔒</button>
+      <p class="lhint">Tick items as the team confirms them — everyone sees updates live. Reset is admin-only (passcode).</p>
+    </div>
     <div class="grid2">
       <div class="card"><div class="label">✅ Built &amp; live on the Drive</div>
-        <ul class="check" style="margin:.4em 0 0;padding-left:18px">
+        <ul class="check live-check" style="margin:.4em 0 0">
           <li>Foundation — 7 MASTER docs, Strategy, Avatar Research, Reference, Roles</li>
           <li>Marketing — 5 content types, each with brain + samples + Drafts/Approved</li>
           <li>Speaking &amp; Media, plus the 5 internal work areas</li>
@@ -241,7 +273,7 @@
           <li>Offer Library current (The Playground → Frequency Sessions → immersions)</li>
         </ul></div>
       <div class="card"><div class="label">▢ To go live</div>
-        <ul class="check" style="margin:.4em 0 0;padding-left:18px">
+        <ul class="check live-check" style="margin:.4em 0 0">
           <li>Send the rollout note; give each person Drive access + their role card</li>
           <li>Everyone connects their tools and runs one produce→review→approve cycle</li>
           <li>A few internal facts to confirm (Advanced Guidance pricing, etc.)</li>
@@ -273,6 +305,10 @@
     <strong>The Wide Awakening · Claude OS Implementation Guide — v2 (folder-pointing model)</strong><br>
     Updated 2026 · Maintained by Adam Lamb + Jeannie Selda · Questions? adam@cheflifemedia.com<br>
     Source of truth: <code>G:\Shared drives\TWA Team Drive\5. Claude OS</code> · Get Out of Your Own Way™ is a trademark of DragonFly South Inc.
+    <div class="foot-row">
+      <img class="foot-logo" src="logo.png" alt="Chef Life Media" onerror="this.style.display='none'">
+      <span class="foot-sp">Service provider · <b>Chef Life Media LLC</b></span>
+    </div>
   </div>
 </footer>
 
@@ -328,6 +364,69 @@ function showTab(t){
   }
   render();
   if(location.hash==='#playbook'){ showTab('pb'); }
+})();
+</script>
+
+<!-- ── Live shared checklist (Supabase project: twa-claude-os) ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+  const SB_URL='https://hkhcbmworgfossnfhpeu.supabase.co';
+  const SB_KEY='sb_publishable_zFOIF91S6ZvInM0lhqJ2HA_DhsevBaW'; // public anon key — safe to expose
+  let sb=null; try{ sb=window.supabase.createClient(SB_URL,SB_KEY); }catch(e){ console.error('supabase init failed',e); }
+
+  const items=[...document.querySelectorAll('.live-check li')];
+  const map=new Map();
+  let myName=localStorage.getItem('twa_name')||'';
+  const nameEl=document.getElementById('bname');
+  if(nameEl){ nameEl.value=myName; nameEl.addEventListener('input',()=>{ myName=nameEl.value.trim(); localStorage.setItem('twa_name',myName); }); }
+
+  items.forEach((li,i)=>{
+    const key='v2c-'+i; li.dataset.key=key; map.set(key,li);
+    const text=document.createElement('span'); text.className='ctext';
+    while(li.firstChild) text.appendChild(li.firstChild);
+    const box=document.createElement('span'); box.className='cbx'; box.textContent='✓';
+    const by=document.createElement('span'); by.className='by';
+    li.appendChild(box); li.appendChild(text); li.appendChild(by);
+    li.addEventListener('click',()=>setItem(li,!li.classList.contains('done'),myName,true));
+  });
+
+  function setItem(li,checked,by,write){
+    li.classList.toggle('done',checked);
+    const byEl=li.querySelector('.by'); if(byEl) byEl.textContent=(checked&&by)?'✓ '+by:'';
+    if(write&&sb){ sb.from('checklist_state').upsert({item_key:li.dataset.key,checked,updated_by:by||null,updated_at:new Date().toISOString()}).then(({error})=>{ if(error) console.error('write failed',error); }); }
+    updateCount();
+  }
+  function updateCount(){
+    const done=items.filter(li=>li.classList.contains('done')).length;
+    const el=document.getElementById('bcount'); if(el) el.textContent=done+' / '+items.length+' complete';
+  }
+  function setOnline(on){ const d=document.getElementById('bdot'); if(d) d.classList.toggle('off',!on); }
+
+  async function init(){
+    if(!sb){ const el=document.getElementById('bcount'); if(el) el.textContent='offline'; setOnline(false); return; }
+    try{
+      const {data,error}=await sb.from('checklist_state').select('*'); if(error) throw error;
+      (data||[]).forEach(r=>{ const li=map.get(r.item_key); if(li) setItem(li,r.checked,r.updated_by,false); });
+      setOnline(true); updateCount();
+    }catch(e){ console.error('load failed',e); setOnline(false); const el=document.getElementById('bcount'); if(el) el.textContent='offline'; }
+    sb.channel('v2_checklist').on('postgres_changes',{event:'*',schema:'public',table:'checklist_state'},p=>{
+      if(p.eventType==='DELETE'){ const li=map.get(p.old.item_key); if(li) setItem(li,false,'',false); }
+      else { const li=map.get(p.new.item_key); if(li) setItem(li,p.new.checked,p.new.updated_by,false); }
+    }).subscribe(s=>setOnline(s==='SUBSCRIBED'));
+  }
+
+  const rb=document.getElementById('breset');
+  if(rb) rb.addEventListener('click',async()=>{
+    if(!sb){ alert('Offline — cannot reset right now.'); return; }
+    const code=prompt('Admin passcode to clear ALL items for everyone:'); if(code===null) return;
+    const {data,error}=await sb.rpc('reset_checklist',{p_code:code.trim()});
+    if(error){ console.error('reset failed',error); alert('Reset failed — please try again.'); return; }
+    if(data===true){ items.forEach(li=>setItem(li,false,'',false)); }
+    else alert('Incorrect passcode. Only the admin can reset the checklist.');
+  });
+
+  updateCount(); init();
 })();
 </script>
 
